@@ -1,6 +1,11 @@
 import Link from 'next/link';
+import { auth } from "@clerk/nextjs/server"
 
-export default function Home() {
+export default async function Home() {
+  const { userId } = await auth();
+
+  const href =  userId ? '/journal' : '/new-user'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Navigation */}
@@ -31,7 +36,7 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/journal">
+            <Link href={href}>
             <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
               Get Started Free
             </button>
