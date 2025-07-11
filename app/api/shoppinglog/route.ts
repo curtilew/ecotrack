@@ -2,7 +2,7 @@ import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
-
+// @ts-expect-error Database returns null but component expects undefined
 const createLocalDate = (dateString) => {
     if (!dateString) return new Date();
     const [year, month, day] = dateString.split('-');

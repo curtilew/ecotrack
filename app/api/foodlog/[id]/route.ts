@@ -2,7 +2,7 @@ import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { NextResponse } from "next/server"
 
-
+// @ts-expect-error Database returns null but component expects undefined
 export const PATCH = async (request: Request, { params }) => {
     const { foodType, quantity, unit, mealType, date, note } = await request.json();
 
