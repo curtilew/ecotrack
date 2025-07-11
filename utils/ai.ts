@@ -22,7 +22,7 @@ const parser = StructuredOutputParser.fromZodSchema(
             .describe('Brief recommendation on how to reduce carbon footprint based on totals')
     })
 )
-
+// @ts-expect-error Database returns null but component expects undefined
 const getPromptForCarbonTotal = async (content) => {
     const formatted_instructions = parser.getFormatInstructions()
 

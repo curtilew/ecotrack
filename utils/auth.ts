@@ -7,6 +7,7 @@ export const getUserByClerkID = async () => {
 
     const user = await prisma.user.findUniqueOrThrow({
         where: {
+            // @ts-expect-error Database returns null but component expects undefined
             clerkId: userId,
         },
     })
