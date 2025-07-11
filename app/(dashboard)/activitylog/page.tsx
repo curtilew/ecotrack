@@ -32,7 +32,7 @@ const getLogs = async () => {
         ...energyLogs.map(log => ({ ...log, logType: 'energy' })),
         ...foodLogs.map(log => ({ ...log, logType: 'food' })),
         ...shoppingLogs.map(log => ({ ...log, logType: 'shopping' })),
-    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
     return allLogs
 }
