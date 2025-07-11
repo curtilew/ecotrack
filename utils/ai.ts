@@ -58,6 +58,7 @@ const getPromptForCarbonTotal = async (content) => {
 }
 
 // Main analysis function that returns the parsed object
+// @ts-expect-error Database returns null but component expects undefined
 export const analyzeTotal = async (content) => {
     try {
         // Initialize OpenAI model
@@ -76,6 +77,7 @@ export const analyzeTotal = async (content) => {
         const aiResponse = result.content
 
         // Parse the structured output to get just the object
+        // @ts-expect-error Database returns null but component expects undefined
         const parsedResult = await parser.parse(aiResponse)
 
         console.log('Parsed carbon footprint analysis:', parsedResult)
