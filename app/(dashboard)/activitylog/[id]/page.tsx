@@ -3,7 +3,7 @@ import Editor from "@/components/Editor";
 import { getUserByClerkID } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 
-const getLog = async (id) => {
+const getLog = async (id: string) => {
     const user = await getUserByClerkID()
     const log = await prisma.transportationActivityLog.findUnique({
         where: {
