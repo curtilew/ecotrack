@@ -30,7 +30,7 @@ import { NextResponse } from "next/server"
     
 //     return NextResponse.json({ data: log })
 // }
-
+// @ts-expect-error Database returns null but component expects undefined
 const createLocalDate = (dateString) => {
     if (!dateString) return new Date();
     const [year, month, day] = dateString.split('-');
