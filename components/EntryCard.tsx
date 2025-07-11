@@ -1,7 +1,24 @@
 
 
 
-const EntryCard = ({ log }) => {
+interface Log {
+  createdAt: string;
+  activityType?: string;
+  distance?: number;
+  energyType?: string;
+  usage?: number;
+  unit?: string;
+  foodType?: string;
+  quantity?: number;
+  category?: string;
+  itemName?: string;
+  price?: number;
+  carbonFootprint?: number;
+  note?: string;
+  date?: string;
+}
+
+const EntryCard = ({ log }: { log: Log }) => {
   // const date = new Date(log.createdAt).toDateString();
   
   // Get the main display info and theme based on log type

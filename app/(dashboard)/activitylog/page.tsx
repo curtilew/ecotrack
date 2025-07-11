@@ -1,46 +1,46 @@
-import { getUserByClerkID } from "@/utils/auth"
-import { prisma } from "@/utils/db"
+// import { getUserByClerkID } from "@/utils/auth"
+// import { prisma } from "@/utils/db"
 import ActivityLogClient from "./ActivityLogClient"
 
 
-const getLogs = async () => {
-    const user = await getUserByClerkID()
+// const getLogs = async () => {
+//     const user = await getUserByClerkID()
     
-    // Fetch all log types
-    const [transportationLogs, energyLogs, foodLogs, shoppingLogs] = await Promise.all([
-        prisma.transportationActivityLog.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: 'desc' },
-        }),
-        prisma.energyActivityLog.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: 'desc' },
-        }),
-        prisma.foodActivityLog.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: 'desc' },
-        }),
-        prisma.shoppingActivityLog.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: 'desc' },
-        }),
-    ])
+//     // Fetch all log types
+//     const [transportationLogs, energyLogs, foodLogs, shoppingLogs] = await Promise.all([
+//         prisma.transportationActivityLog.findMany({
+//             where: { userId: user.id },
+//             orderBy: { createdAt: 'desc' },
+//         }),
+//         prisma.energyActivityLog.findMany({
+//             where: { userId: user.id },
+//             orderBy: { createdAt: 'desc' },
+//         }),
+//         prisma.foodActivityLog.findMany({
+//             where: { userId: user.id },
+//             orderBy: { createdAt: 'desc' },
+//         }),
+//         prisma.shoppingActivityLog.findMany({
+//             where: { userId: user.id },
+//             orderBy: { createdAt: 'desc' },
+//         }),
+//     ])
 
-    // Combine all logs with type information
-    const allLogs = [
-        ...transportationLogs.map(log => ({ ...log, logType: 'transportation' })),
-        ...energyLogs.map(log => ({ ...log, logType: 'energy' })),
-        ...foodLogs.map(log => ({ ...log, logType: 'food' })),
-        ...shoppingLogs.map(log => ({ ...log, logType: 'shopping' })),
-    ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+//     // Combine all logs with type information
+//     const allLogs = [
+//         ...transportationLogs.map(log => ({ ...log, logType: 'transportation' })),
+//         ...energyLogs.map(log => ({ ...log, logType: 'energy' })),
+//         ...foodLogs.map(log => ({ ...log, logType: 'food' })),
+//         ...shoppingLogs.map(log => ({ ...log, logType: 'shopping' })),
+//     ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
-    return allLogs
-}
+//     return allLogs
+// }
 
 const ActivityLogPage = async () => {
-    const logs = await getLogs()
+    // const logs = await getLogs()
 
-    return <ActivityLogClient logs={logs} />
+    return <ActivityLogClient />
 }
 
 export default ActivityLogPage

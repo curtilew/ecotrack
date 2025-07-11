@@ -12,7 +12,18 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const CarbonFootprintChart = ({ aiAnalysis }) => {
+interface Breakdown {
+    transportation?: number;
+    energy?: number;
+    food?: number;
+    shopping?: number;
+}
+
+interface AIAnalysis {
+    breakdown?: Breakdown;
+}
+
+const CarbonFootprintChart = ({ aiAnalysis }: { aiAnalysis?: AIAnalysis }) => {
     if (!aiAnalysis || !aiAnalysis.breakdown) {
         return (
             <div className="mb-6">
@@ -61,14 +72,18 @@ const chartData = {
                 stacked: true,
                 beginAtZero: true,
                 ticks: {
-                    callback: (value) => `${value}g`
+                    callback: (value: unknown) => `${value}g`
                 }
             }
         },
         plugins: {
             tooltip: {
                 callbacks: {
-                    label: (context) => `${context.dataset.label}: ${context.parsed.y}g CO₂`
+                    label: function (tooltipItem: import('chart.js').TooltipItem<'bar'>) {
+                        const label = tooltipItem.dataset.label || '';
+                        const value = tooltipItem.parsed.y ?? tooltipItem.parsed;
+                        return `${label}: ${value}g CO₂`;
+                    }
                 }
             }
         }

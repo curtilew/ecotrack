@@ -51,7 +51,7 @@ const getLogs = async () => {
         ...energyLogs.map(log => ({ ...log, logType: 'energy' })),
         ...foodLogs.map(log => ({ ...log, logType: 'food' })),
         ...shoppingLogs.map(log => ({ ...log, logType: 'shopping' })),
-    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
  
     return allLogs
@@ -59,7 +59,12 @@ const getLogs = async () => {
 
 
 // Simple Progress Bar Component
-const SimpleProgressBar = ({ actual, goal = 50 }) => {
+type SimpleProgressBarProps = {
+    actual: number;
+    goal?: number;
+};
+
+const SimpleProgressBar = ({ actual, goal = 50 }: SimpleProgressBarProps) => {
     const percentage = Math.min((actual / goal) * 100, 100);
     const isOver = actual > goal;
     
@@ -179,6 +184,16 @@ const getAIAnalysis = async (dateRange = 'today') => {
             breakdown: { transportation: 0, energy: 0, food: 0, shopping: 0 },
             confidence: 'low',
             methodology: 'Error occurred'
+        } as {
+            total: number;
+            breakdown: {
+                transportation: number;
+                energy: number;
+                food: number;
+                shopping: number;
+            };
+            confidence: string;
+            methodology: string;
         };
     }
 };
@@ -269,11 +284,18 @@ const getRecentCarbonFootprints = async () => {
     try {
         const aiAnalysis = await getAIAnalysis();
         
+        const breakdown = aiAnalysis.breakdown ?? { transportation: 0, energy: 0, food: 0, shopping: 0 };
+        const {
+            transportation = 0,
+            energy = 0,
+            food = 0,
+            shopping = 0
+        } = breakdown as { transportation?: number; energy?: number; food?: number; shopping?: number };
         return {
-            transportation: aiAnalysis.breakdown?.transportation || 0,
-            energy: aiAnalysis.breakdown?.energy || 0,
-            food: aiAnalysis.breakdown?.food || 0,
-            shopping: aiAnalysis.breakdown?.shopping || 0
+            transportation,
+            energy,
+            food,
+            shopping
         };
     } catch (error) {
         console.error('Error getting AI carbon breakdown:', error);
@@ -446,7 +468,10 @@ const ActivityPage = async () => {
                         {logs.length > 0 ? (
                             <div className="flex flex-row gap-4 overflow-x-auto p-2">
                                 {logs.map((log) => (
-                                    <EntryCard log={log} key={log.id}/>
+                                    <EntryCard
+                                        log={log as unknown as any}
+                                        key={log.id}
+                                    />
                                 ))}
                             </div>
                         ) : (
