@@ -2,7 +2,7 @@
 
 
 const EntryCard = ({ log }) => {
-  const date = new Date(log.createdAt).toDateString();
+  // const date = new Date(log.createdAt).toDateString();
   
   // Get the main display info and theme based on log type
   const getDisplayInfo = () => {

@@ -373,7 +373,7 @@ const ActivityPage = async () => {
                     {/* Main Dashboard Cards */}
                     <section className="flex justify-between gap-6">
                         <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
-                            <h2 className="text-xl font-medium mb-4 text-slate-700">Today's Impact</h2>
+                            <h2 className="text-xl font-medium mb-4 text-slate-700">Today`s Impact</h2>
                             
                             {/* Goal progress bar */}
                             <div className="mb-4">
