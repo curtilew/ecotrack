@@ -1,33 +1,206 @@
-Index page: app/page.tsx
+# EcoTrack - Personal Carbon Footprint Tracker
 
-Page.tsx
-Each route has a page.tsx file as its home page
-Get started links to journal
+A Next.js web application that helps users track their daily carbon footprint across multiple categories (transportation, energy, food, shopping) and provides AI-powered personalized recommendations for reducing environmental impact.
 
-Clerk added for userauthentication
+## Tech Stack
 
-catch all routing system- any route that comes after signup will show signup form first
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL (Neon)
+- **ORM**: Prisma
+- **Authentication**: Clerk
+- **AI Integration**: OpenAI API
+- **Deployment**: Vercel
 
-middleware a function to run on edge to protect and routes you have
+## Project Structure
 
-NEXT_PUBLIC: if not included you can only access variables on the server and not on the front end
+```
+ecotrack/
+├── app/                          # Next.js app directory
+│   ├── (dashboard)/             # Dashboard route group (protected routes)
+│   │   ├── activitylog/         # Activity logging functionality
+│   │   │   └── [id]/            # Dynamic route for individual activity editing
+│   │   ├── analytics/           # Data analytics and insights page
+│   │   └── dashboard_home/      # Main dashboard overview
+│   ├── api/                     # API routes for data operations
+│   │   ├── activitylog/         # General activity log endpoints
+│   │   │   └── [id]/            # Individual activity CRUD operations
+│   │   ├── energylog/           # Energy-specific logging endpoints
+│   │   │   └── [id]/            # Energy activity CRUD operations
+│   │   ├── foodlog/             # Food-specific logging endpoints
+│   │   │   └── [id]/            # Food activity CRUD operations
+│   │   └── shoppinglog/         # Shopping-specific logging endpoints
+│   │       └── [id]/            # Shopping activity CRUD operations
+│   ├── generated/               # Auto-generated files
+│   │   └── prisma/              # Prisma client generation
+│   │       └── runtime/         # Prisma runtime files
+│   ├── new-user/                # New user onboarding flow
+│   ├── sign-in/                 # Authentication pages
+│   │   └── [[...sign-in]]/      # Clerk sign-in catch-all routes
+│   ├── sign-up/                 # User registration pages
+│   │   └── [[...sign-up]]/      # Clerk sign-up catch-all routes
+│   ├── layout.tsx               # Root layout component
+│   └── page.tsx                 # Landing/home page
+├── components/                   # Reusable UI components
+│   ├── CreateTransLog.tsx       # Transportation logging form
+│   ├── CreateEnergyLog.tsx      # Energy logging form
+│   ├── CreateFoodLog.tsx        # Food logging form
+│   ├── CreateShoppingLog.tsx    # Shopping logging form
+│   ├── EntryCard.tsx            # Activity display card
+│   ├── EntryOptions.tsx         # Activity category selector
+│   └── Editor.tsx               # Activity edit form
+├── utils/                       # Utility functions and helpers
+│   ├── api.ts                   # API helper functions
+│   ├── auth.ts                  # Authentication utilities
+│   └── db.ts                    # Database connection
+├── prisma/                      # Database schema and configuration
+│   └── schema.prisma            # Database schema definitions
+├── public/                      # Static assets
+├── middleware.ts                # Route protection middleware
+└── package.json                 # Dependencies and scripts
+```
 
-set up next.js folder structure
+## Setup & Installation
 
-create home page
+1. **Clone the repository**
 
-create sign in
+   ```bash
+   git clone <your-repo-url>
+   cd ecotrack
+   ```
 
-create sign up
+2. **Install dependencies**
 
-add clerk
+   ```bash
+   npm install
+   ```
 
-add neon db
+3. **Environment variables**
+   Create `.env.local` file with:
 
-add prisma (w/sdk)
+   ```bash
+   # Database
+   DATABASE_URL="your-neon-postgres-url"
 
-prisma creates tables in neon (postgressql) via prisma sdk
+   # Clerk Authentication
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your-clerk-publishable-key"
+   CLERK_SECRET_KEY="your-clerk-secret-key"
 
-layout.tsx wraps all of its sibling components in its described styling
+   # OpenAI (for AI recommendations)
+   OPENAI_API_KEY="your-openai-api-key"
+   ```
 
-Need to include fallbacks for each data point in api/routes. will not record to db if fallback not included
+4. **Set up database**
+
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+## Architecture Overview
+
+### Database Schema
+
+The application uses four separate activity log models:
+
+- `TransportationActivityLog` - Car, bike, public transit activities
+- `EnergyActivityLog` - Electricity, gas, heating usage
+- `FoodActivityLog` - Meal tracking with carbon impact
+- `ShoppingActivityLog` - Purchase tracking with sustainability metrics
+
+### Authentication
+
+- **Clerk** handles user authentication and session management
+- **Middleware** (`middleware.ts`) protects dashboard routes
+- Catch-all routing system ensures unauthenticated users see sign-up first
+
+### API Design
+
+- RESTful API endpoints for each activity type
+- Standardized CRUD operations (POST, PATCH, GET)
+- Consistent error handling and data validation
+- **Important**: All API routes require fallbacks for data points - entries won't save to database without proper fallback values
+
+### Frontend Architecture
+
+- **Dashboard Layout** (`layout.tsx`) wraps all dashboard components with consistent navigation
+- **Route Groups** organize related pages (dashboard routes grouped together)
+- **Client/Server Components** optimized for performance and user experience
+
+## Key Features
+
+### Activity Logging
+
+- Multi-category tracking (Transportation, Energy, Food, Shopping)
+- Type-specific forms with relevant fields
+- Automatic carbon footprint calculations
+- Date and note tracking for all activities
+
+### Dashboard
+
+- Unified view of all logged activities
+- Quick activity category selection
+- Recent activities display with edit capabilities
+- Responsive design with mobile support
+
+### Data Management
+
+- Individual API routes for each activity type
+- Unified data display with type-aware routing
+- Edit functionality for all logged activities
+- Proper data validation and type conversion
+
+## Development Notes
+
+### Environment Variables
+
+- `NEXT_PUBLIC_*` prefix required for client-side access
+- Server-only variables accessible in API routes and server components only
+
+### Database Considerations
+
+- Prisma generates type-safe database client
+- Relations properly set up between User and all activity models
+- Optional Analysis model for future AI integration
+
+### API Route Patterns
+
+```typescript
+// Creating entries
+await createNewEntry(entryData, 'transportation')
+
+// Updating entries
+await updateEntry(id, logData, 'energy')
+```
+
+### Component Organization
+
+- Reusable forms for each activity type
+- Shared styling patterns across components
+- Type-safe props and state management
+
+## Future Enhancements
+
+- **AI Recommendations**: OpenAI integration for personalized carbon reduction tips
+- **Data Visualization**: Advanced charts and analytics
+- **Goal Setting**: Carbon reduction targets and progress tracking
+- **Social Features**: Community comparisons and achievements
+- **Microservices**: Planned integration with teammate-built community features
+
+## Contributing
+
+1. Follow the established folder structure
+2. Maintain TypeScript typing throughout
+3. Include proper error handling in API routes
+4. Add fallback values for all database fields
+5. Test on multiple screen sizes for responsive design
+
+---
+
+Built for environmental impact awareness
