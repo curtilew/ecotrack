@@ -220,77 +220,96 @@ const ActivityPage = async () => {
     
 
     return (
-        <div className="p-10 bg-zinc-400/10 h-full flex flex-col">
-            <h2 className="text-3xl mb-8">Dashboard</h2>
+            <div className="h-full flex flex-col bg-slate-50/30">
+                {/* Fixed Header */}
+                <div className="flex-shrink-0 p-6 pb-4">
+                    <h2 className="text-3xl mb-6 font-medium text-slate-700">Dashboard</h2>
+                </div>
 
-            <section className="flex justify-between gap-4">
-                <div className="border border-gray-200 p-6 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow flex-1">
-                    <h2 className="text-xl font-bold mb-4">Today's Impact</h2>
-                    <div>Placeholder for daily Impact</div>
-                    <div className="mb-4">
-                                <h3 className="text-lg font-semibold mb-2">Breakdown</h3>
-                                <div className="space-y-1">
-                                    <div className="flex justify-between">
-                                        <span>Transportation:</span>
-                                        <span className="text-gray-600">
-                                            {carbonData.transportation > -1 ? `${carbonData.transportation.toFixed(2)} kg CO₂` : '--'}
-                                        </span>
+                {/* Scrollable Content Area */}
+                <div className="flex-1 overflow-auto px-6 pb-6">
+                    <div className="space-y-6">
+                        {/* Main Dashboard Cards */}
+                        <section className="flex justify-between gap-6">
+                            <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
+                                <h2 className="text-xl font-medium mb-4 text-slate-700">Today's Impact</h2>
+                                
+                                {/* Goal progress bar */}
+                                <div className="mb-4">
+                                    <SimpleProgressBar actual={todaysTotal} goal={50} />
+                                </div>
+                                
+                                <div className="mb-6">
+                                    <h3 className="text-base font-medium mb-3 text-slate-600">Breakdown</h3>
+                                    <div className="space-y-1">
+                                        <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
+                                            <span className="text-slate-600">Transportation:</span>
+                                            <span className="text-slate-500 font-mono text-sm">
+                                                {carbonData.transportation > -1 ? `${carbonData.transportation.toFixed(2)} kg CO₂` : '--'}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
+                                            <span className="text-slate-600">Food:</span>
+                                            <span className="text-slate-500 font-mono text-sm">
+                                                {carbonData.food > -1 ? `${carbonData.food.toFixed(2)} kg CO₂` : '--'}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
+                                            <span className="text-slate-600">Energy:</span>
+                                            <span className="text-slate-500 font-mono text-sm">
+                                                {carbonData.energy > -1 ? `${carbonData.energy.toFixed(2)} kg CO₂` : '--'}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
+                                            <span className="text-slate-600">Shopping:</span>
+                                            <span className="text-slate-500 font-mono text-sm">
+                                                {carbonData.shopping > -1 ? `${carbonData.shopping.toFixed(2)} kg CO₂` : '--'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <span>Food:</span>
-                                        <span className="text-gray-600">
-                                            {carbonData.food > -1 ? `${carbonData.food.toFixed(2)} kg CO₂` : '--'}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Energy:</span>
-                                        <span className="text-gray-600">
-                                            {carbonData.energy > -1 ? `${carbonData.energy.toFixed(2)} kg CO₂` : '--'}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Shopping:</span>
-                                        <span className="text-gray-600">
-                                            {carbonData.shopping > -1 ? `${carbonData.shopping.toFixed(2)} kg CO₂` : '--'}
-                                        </span>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-base font-medium mb-3 text-slate-600">Recommendations</h3>
+                                    <div className="bg-slate-50/60 p-3 rounded border border-slate-200/30">
+                                        <div className="text-slate-500 text-sm">AI recommendations coming soon...</div>
                                     </div>
                                 </div>
                             </div>
-
-                    {/* Goal progress bar */}
-                    <div className="mb-4">
-                        <SimpleProgressBar actual={todaysTotal} goal={50} />
-                    </div>
-
-                    <div>
-                        <h3 className="text-lg font-semibold mb-2">Recommendations</h3>
-                        <div className="text-gray-600">Placeholder for AI Recommendations</div>
+                            
+                            <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
+                                <h2 className="text-xl font-medium mb-4 text-slate-700">Weekly Carbon Footprint</h2>
+                                <div className="h-64">
+                                    <CarbonFootprintChart data={chartData} />
+                                </div>
+                            </div>
+                        </section>
+                        
+                        {/* Recent Activities Section */}
+                        <div className="bg-white/60 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm">
+                            <h3 className="text-xl font-medium mb-4 text-slate-700">Recent Activities</h3>
+                            {logs.length > 0 ? (
+                                <div className="flex flex-row gap-4 overflow-x-auto pb-2">
+                                    {logs.map((log) => (
+                                        <Link href={getLogRoute(log)} key={log.id}>
+                                            <EntryCard log={log} />
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8">
+                                    <div className="text-slate-300 mb-2 text-2xl">📊</div>
+                                    <p className="text-slate-500 mb-3">No activities logged yet. Start by adding your first activity!</p>
+                                    <Link href="/activitylog" className="inline-block px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors text-sm font-medium">
+                                        Log Your First Activity
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-                
-                <div className="border border-gray-200 p-6 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow flex-1">
-                    <h2 className="text-xl font-bold mb-4">Weekly Carbon Footprint</h2>
-                    <CarbonFootprintChart data={chartData} />
-                </div>
-            </section>
-            
-            {/* Display all logs with proper routing */}
-            <div className="mt-auto">
-                <h3 className="text-2xl mb-4">Recent Activities</h3>
-                {logs.length > 0 ? (
-                    <div className="flex flex-row gap-4 overflow-x-auto">
-                        {logs.map((log) => (
-                            <Link href={getLogRoute(log)} key={log.id}>
-                                <EntryCard log={log} />
-                            </Link>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-gray-500">No activities logged yet. Start by adding your first activity above!</p>
-                )}
             </div>
-        </div>
-    )
+        )
     }
 
 export default ActivityPage

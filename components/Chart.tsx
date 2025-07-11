@@ -26,26 +26,26 @@ const SimpleCarbonBarChart = ({ data }) => {
             const localDate = createLocalDateFromDB(item.date);
             return localDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }),
-        datasets: [
+datasets: [
             {
                 label: 'Transportation',
                 data: data.map(item => item.transport),
-                backgroundColor: '#3b82f6', // Blue
+                backgroundColor: '#fbbf24', // Amber-100
             },
             {
                 label: 'Energy',
                 data: data.map(item => item.energy),
-                backgroundColor: '#f59e0b', // Yellow
+                backgroundColor: '#fde68a', // Amber-200
             },
             {
                 label: 'Food',
                 data: data.map(item => item.food),
-                backgroundColor: '#10b981', // Green
+                backgroundColor: '#fcd34d', // Amber-300
             },
             {
                 label: 'Shopping',
                 data: data.map(item => item.shopping),
-                backgroundColor: '#8b5cf6', // Purple
+                backgroundColor: '#fef3c7', // Amber-500
             }
         ]
     };
