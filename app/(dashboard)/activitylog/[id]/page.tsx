@@ -3,6 +3,10 @@ import Editor from "@/components/Editor";
 import { getUserByClerkID } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 
+interface LogPageProps {
+  params: Promise<{ id: string }>;
+}
+
 const getLog = async (id: string) => {
     const user = await getUserByClerkID()
     const log = await prisma.transportationActivityLog.findUnique({
@@ -17,8 +21,8 @@ const getLog = async (id: string) => {
     return log
 }
 
-const LogPage = async ({ params }) => {
- 
+const LogPage = async ({ params }: LogPageProps) => {
+
     const { id } = await params;
 
     const log = await getLog(id)
