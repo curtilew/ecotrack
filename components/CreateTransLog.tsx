@@ -12,7 +12,7 @@ const activityTypes = [
   "Other"
 ];
 
-const CreateLog = () => {
+const CreateTransLog = () => {
   const [activityType, setActivityType] = useState("");
   const [distance, setDistance] = useState("");
   const [date, setDate] = useState("");
@@ -26,7 +26,7 @@ const handleSave = async () => {
     distance,
     date,
     note,
-  });
+  }, 'transportation');
   setIsLoading(false);
 };
 
@@ -86,4 +86,4 @@ const handleSave = async () => {
   );
 };
 
-export default CreateLog;
+export default CreateTransLog;

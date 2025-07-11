@@ -29,3 +29,5 @@ add prisma (w/sdk)
 prisma creates tables in neon (postgressql) via prisma sdk
 
 layout.tsx wraps all of its sibling components in its described styling
+
+Need to include fallbacks for each data point in api/routes. will not record to db if fallback not included

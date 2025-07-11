@@ -53,7 +53,7 @@ return (
     //   onClick={handleOnClickShopping}
     >
       <div className="px-6 py-8 text-center">
-        <div className="text-4xl mb-3">🛒</div>
+        {/* <div className="text-4xl mb-3">🛒</div> */}
         <span className="text-xl font-semibold text-gray-800">Shopping</span>
       </div>
     </div>

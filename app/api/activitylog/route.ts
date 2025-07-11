@@ -34,16 +34,19 @@ import { NextResponse } from "next/server"
 
 export const POST = async (request: Request) => {
     const user = await getUserByClerkID();
-    const { note, activityType, date, distance, carbonFootprint } = await request.json();
+    const requestBody = await request.json();
+    const wrappedData = requestBody.entryData;
+
+    const { note, activityType, date, distance, carbonFootprint } = wrappedData;
 
     const log = await prisma.transportationActivityLog.create({
         data: {
             userId: user.id,
-            note: note,
-            activityType: activityType,
+            note: note || null, //Need to include fallbacks for each data point. will not record to db if fallback not included
+            activityType: activityType || null,
             date: date ? new Date(date) : new Date(),
-            distance: distance,
-            carbonFootprint: carbonFootprint ?? 0, // fallback if not provided
+            distance: distance ? parseFloat(distance) : null,
+            carbonFootprint: carbonFootprint ? parseFloat(carbonFootprint) : 0,
         },
     });
 

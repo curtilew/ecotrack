@@ -20,9 +20,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  clerkId String                      @unique
-  email   String                      @unique
-  entries TransportationActivityLog[]
+  clerkId            String                      @unique
+  email              String                      @unique
+  transportationLogs TransportationActivityLog[]
+  energyLogs         EnergyActivityLog[]
+  foodLogs           FoodActivityLog[]
+  shoppingLogs       ShoppingActivityLog[]
 }
 
 model TransportationActivityLog {
@@ -44,13 +47,84 @@ model TransportationActivityLog {
   @@unique([userId, id]) // Ensures that each user can have only one entry with the same ID
 }
 
+model EnergyActivityLog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  energyType      String? // Type of energy (e.g., "Electricity", "Natural Gas", etc.)
+  usage           Float? // Amount of energy used
+  unit            String? // Unit of measurement (e.g., "kWh", "therms", etc.)
+  date            DateTime? // Date of the activity
+  carbonFootprint Float? // Carbon footprint of the activity in kg CO2
+  note            String?   @db.Text
+
+  analysis Analysis? // Optional analysis for the activity log
+
+  @@unique([userId, id])
+}
+
+model FoodActivityLog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  foodType        String? // Type of food (e.g., "Beef", "Vegetables", etc.)
+  quantity        Float? // Quantity consumed
+  unit            String? // Unit of measurement (e.g., "servings", "pounds", etc.)
+  mealType        String? // Type of meal (e.g., "Breakfast", "Lunch", etc.)
+  date            DateTime? // Date of the activity
+  carbonFootprint Float? // Carbon footprint of the activity in kg CO2
+  note            String?   @db.Text
+
+  analysis Analysis? // Optional analysis for the activity log
+
+  @@unique([userId, id])
+}
+
+model ShoppingActivityLog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  category        String? // Shopping category (e.g., "Clothing", "Electronics", etc.)
+  itemName        String? // Name of the item purchased
+  price           Float? // Price of the item
+  quantity        Int? // Quantity purchased
+  isSecondHand    Boolean   @default(false) // Whether the item was second-hand
+  date            DateTime? // Date of the activity
+  carbonFootprint Float? // Carbon footprint of the activity in kg CO2
+  note            String?   @db.Text
+
+  analysis Analysis? // Optional analysis for the activity log
+
+  @@unique([userId, id])
+}
+
 model Analysis {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  logId String
-  log   TransportationActivityLog @relation(fields: [logId], references: [id]) // This creates a relationship with the TransportationActivityLog model
+  transportationLogId String? @unique
+  energyLogId         String? @unique
+  foodLogId           String? @unique
+  shoppingLogId       String? @unique
+
+  // Relations to different log types
+  transportationLog TransportationActivityLog? @relation(fields: [transportationLogId], references: [id])
+  energyLog         EnergyActivityLog?         @relation(fields: [energyLogId], references: [id])
+  foodLog           FoodActivityLog?           @relation(fields: [foodLogId], references: [id])
+  shoppingLog       ShoppingActivityLog?       @relation(fields: [shoppingLogId], references: [id])
 
   total           Float?
   goal            Float?
@@ -59,6 +133,4 @@ model Analysis {
   summary         String? @db.Text
   color           String?
   recommendation  String?
-
-  @@unique([logId])
 }
