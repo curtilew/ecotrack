@@ -28,16 +28,7 @@ const ActivityLogClient = ({ logs }) => {
         }
     }
 
-    const getLogRoute = (log) => {
-        // Route to the appropriate log detail page based on log type
-        const routeMap = {
-            'transportation': `/activitylog/transportation/${log.id}`,
-            'energy': `/activitylog/energy/${log.id}`,
-            'food': `/activitylog/food/${log.id}`,
-            'shopping': `/activitylog/shopping/${log.id}`,
-        }
-        return routeMap[log.logType] || `/activitylog/${log.id}`
-    }
+
 
     return (
         <div className="p-10 bg-zinc-400/10 h-full">
@@ -96,19 +87,7 @@ const ActivityLogClient = ({ logs }) => {
                 
                 {/* <EntryOptions /> */}
                 
-                {/* Display all logs with proper routing */}
-                <div className="mt-8">
-                    <h3 className="text-2xl mb-4">Recent Activities</h3>
-                    {logs.length > 0 ? (
-                        logs.map((log) => (
-                            <Link href={getLogRoute(log)} key={log.id}>
-                                <EntryCard log={log} />
-                            </Link>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No activities logged yet. Start by adding your first activity above!</p>
-                    )}
-                </div>
+
             </div>
         </div>
     )

@@ -31,6 +31,11 @@ import { NextResponse } from "next/server"
 //     return NextResponse.json({ data: log })
 // }
 
+const createLocalDate = (dateString) => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-');
+    return new Date(year, month - 1, day); // month is 0-indexed
+};
 
 export const POST = async (request: Request) => {
     const user = await getUserByClerkID();
@@ -44,7 +49,7 @@ export const POST = async (request: Request) => {
             userId: user.id,
             note: note || null, //Need to include fallbacks for each data point. will not record to db if fallback not included
             activityType: activityType || null,
-            date: date ? new Date(date) : new Date(),
+            date: date ? createLocalDate(date) : new Date(),
             distance: distance ? parseFloat(distance) : null,
             carbonFootprint: carbonFootprint ? parseFloat(carbonFootprint) : 0,
         },

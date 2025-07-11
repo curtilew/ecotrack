@@ -3,6 +3,11 @@ import { prisma } from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
+const createLocalDate = (dateString) => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-');
+    return new Date(year, month - 1, day); // month is 0-indexed
+};
 
 
 export const POST = async (request: Request) => {
@@ -17,7 +22,7 @@ export const POST = async (request: Request) => {
             userId: user.id,
             note: note || null,
             foodType: foodType || null,
-            date: date ? new Date(date) : new Date(),
+            date: date ? createLocalDate(date) : new Date(),
             quantity: quantity ? parseFloat(quantity) : null,
             unit: unit || null,
             mealType: mealType || null,

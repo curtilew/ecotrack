@@ -4,6 +4,11 @@ import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
 
+const createLocalDate = (dateString) => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-');
+    return new Date(year, month - 1, day); // month is 0-indexed
+};
 
 export const POST = async (request: Request) => {
     const user = await getUserByClerkID();
@@ -17,7 +22,7 @@ export const POST = async (request: Request) => {
             userId: user.id,
             note: note || null,
             energyType: energyType || null,
-            date: date ? new Date(date) : new Date(),
+            date: date ? createLocalDate(date) : new Date(),
             usage: usage ? parseFloat(usage) : null,
             unit: unit || null,
             carbonFootprint: carbonFootprint ? parseFloat(carbonFootprint) : 0,

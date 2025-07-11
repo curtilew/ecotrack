@@ -52,12 +52,29 @@ const DashboardLayout = ({ children }) => {
           </Link>
 
           <Link 
+            href="/communityleaderboard" 
+            className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+          >
+            <span className="text-lg"></span>
+            <span className="font-medium">Community LeaderBoard</span>
+          </Link>
+
+          <Link 
+            href="/socialsharing" 
+            className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+          >
+            <span className="text-lg"></span>
+            <span className="font-medium">Social Sharing</span>
+          </Link>
+
+
+          {/* <Link 
             href="/insights" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">🤖</span>
             <span className="font-medium">AI Insights</span>
-          </Link>
+          </Link> */}
         </nav>
       </div>
 
