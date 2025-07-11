@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 
 const AnalyticsPage = () => {
   const [timeRange, setTimeRange] = useState('7d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  // const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Mock data - replace with actual data from your APIs
   const carbonTrendData = [

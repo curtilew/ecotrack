@@ -286,65 +286,65 @@ const getRecentCarbonFootprints = async () => {
     }
 };
 
-const getDailyCarbonByCategory = async (days = 7) => {
-    const user = await getUserByClerkID();
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
+// const getDailyCarbonByCategory = async (days = 7) => {
+//     const user = await getUserByClerkID();
+//     const endDate = new Date();
+//     const startDate = new Date();
+//     startDate.setDate(startDate.getDate() - days);
 
-    const [transport, energy, food, shopping] = await Promise.all([
-        prisma.transportationActivityLog.findMany({
-            where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-            select: { date: true, carbonFootprint: true }
-        }),
-        prisma.energyActivityLog.findMany({
-            where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-            select: { date: true, carbonFootprint: true }
-        }),
-        prisma.foodActivityLog.findMany({
-            where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-            select: { date: true, carbonFootprint: true }
-        }),
-        prisma.shoppingActivityLog.findMany({
-            where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-            select: { date: true, carbonFootprint: true }
-        })
-    ]);
+//     const [transport, energy, food, shopping] = await Promise.all([
+//         prisma.transportationActivityLog.findMany({
+//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
+//             select: { date: true, carbonFootprint: true }
+//         }),
+//         prisma.energyActivityLog.findMany({
+//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
+//             select: { date: true, carbonFootprint: true }
+//         }),
+//         prisma.foodActivityLog.findMany({
+//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
+//             select: { date: true, carbonFootprint: true }
+//         }),
+//         prisma.shoppingActivityLog.findMany({
+//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
+//             select: { date: true, carbonFootprint: true }
+//         })
+//     ]);
 
-    // Group by date
-    const dailyData = {};
+//     // Group by date
+//     const dailyData = {};
     
-    transport.forEach(log => {
-        const date = log.date.toISOString().split('T')[0];
-        if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-        dailyData[date].transport += log.carbonFootprint || 0;
-    });
+//     transport.forEach(log => {
+//         const date = log.date.toISOString().split('T')[0];
+//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
+//         dailyData[date].transport += log.carbonFootprint || 0;
+//     });
     
-    energy.forEach(log => {
-        const date = log.date.toISOString().split('T')[0];
-        if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-        dailyData[date].energy += log.carbonFootprint || 0;
-    });
+//     energy.forEach(log => {
+//         const date = log.date.toISOString().split('T')[0];
+//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
+//         dailyData[date].energy += log.carbonFootprint || 0;
+//     });
     
-    food.forEach(log => {
-        const date = log.date.toISOString().split('T')[0];
-        if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-        dailyData[date].food += log.carbonFootprint || 0;
-    });
+//     food.forEach(log => {
+//         const date = log.date.toISOString().split('T')[0];
+//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
+//         dailyData[date].food += log.carbonFootprint || 0;
+//     });
     
-    shopping.forEach(log => {
-        const date = log.date.toISOString().split('T')[0];
-        if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-        dailyData[date].shopping += log.carbonFootprint || 0;
-    });
+//     shopping.forEach(log => {
+//         const date = log.date.toISOString().split('T')[0];
+//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
+//         dailyData[date].shopping += log.carbonFootprint || 0;
+//     });
 
-    return Object.entries(dailyData)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([date, data]) => ({
-            date,
-            ...data
-        }));
-};
+//     return Object.entries(dailyData)
+//         .sort(([a], [b]) => a.localeCompare(b))
+//         .map(([date, data]) => ({
+//             date,
+//             ...data
+//         }));
+// };
 
 
 // Updated ActivityPage component
@@ -358,7 +358,7 @@ const ActivityPage = async () => {
         getAIAnalysis()
     ]);
     
-    const chartData = await getDailyCarbonByCategory(7);
+    // const chartData = await getDailyCarbonByCategory(7);
 
     return (
         <div className="h-full flex flex-col bg-slate-50/30">
