@@ -10,45 +10,47 @@ import {
     Legend
 } from 'chart.js';
 
-
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const SimpleCarbonBarChart = ({ data }) => {
-    // Helper function to create local date from database date
-    const createLocalDateFromDB = (dbDate) => {
-        const date = new Date(dbDate);
-        // Add timezone offset to get correct local date
-        return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-    };
+const CarbonFootprintChart = ({ aiAnalysis }) => {
+    if (!aiAnalysis || !aiAnalysis.breakdown) {
+        return (
+            <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-4">Carbon Footprint by Category</h3>
+                <div className="h-64 w-full bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-gray-500">No analysis data available</span>
+                </div>
+            </div>
+        );
+    }
 
-    const chartData = {
-        labels: data.map(item => {
-            const localDate = createLocalDateFromDB(item.date);
-            return localDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }),
-datasets: [
-            {
-                label: 'Transportation',
-                data: data.map(item => item.transport),
-                backgroundColor: '#fbbf24', // Amber-100
-            },
-            {
-                label: 'Energy',
-                data: data.map(item => item.energy),
-                backgroundColor: '#fde68a', // Amber-200
-            },
-            {
-                label: 'Food',
-                data: data.map(item => item.food),
-                backgroundColor: '#fcd34d', // Amber-300
-            },
-            {
-                label: 'Shopping',
-                data: data.map(item => item.shopping),
-                backgroundColor: '#fef3c7', // Amber-500
-            }
-        ]
-    };
+    const breakdown = aiAnalysis.breakdown;
+
+const chartData = {
+    labels: ['Today'],
+    datasets: [
+        {
+            label: 'Transportation',
+            data: [(breakdown.transportation || 0)], // Convert kg to g
+            backgroundColor: '#f59e0b' // amber-500
+        },
+        {
+            label: 'Energy', 
+            data: [(breakdown.energy || 0)],
+            backgroundColor: '#fbbf24' // amber-400
+        },
+        {
+            label: 'Food',
+            data: [(breakdown.food || 0)],
+            backgroundColor: '#fcd34d' // amber-300
+        },
+        {
+            label: 'Shopping',
+            data: [(breakdown.shopping || 0)],
+            backgroundColor: '#fde68a' // amber-200
+        }
+    ]
+};
 
     const options = {
         responsive: true,
@@ -59,14 +61,14 @@ datasets: [
                 stacked: true,
                 beginAtZero: true,
                 ticks: {
-                    callback: (value) => `${value} kg`
+                    callback: (value) => `${value}g`
                 }
             }
         },
         plugins: {
             tooltip: {
                 callbacks: {
-                    label: (context) => `${context.dataset.label}: ${context.parsed.y} kg CO₂`
+                    label: (context) => `${context.dataset.label}: ${context.parsed.y}g CO₂`
                 }
             }
         }
@@ -82,4 +84,4 @@ datasets: [
     );
 };
 
-export default SimpleCarbonBarChart;
+export default CarbonFootprintChart;

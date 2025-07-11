@@ -1,6 +1,6 @@
 'use client'
 
-import { createNewEntry, updateEntry } from "@/utils/api";
+import { createNewEntry } from "@/utils/api";
 import { useState } from "react";
 
 const shoppingCategories = [

@@ -11,16 +11,16 @@ import { analyzeTotal } from "@/utils/ai"
 
 
 
-const getLogRoute = (log) => {
-        // Route to the appropriate log detail page based on log type
-        const routeMap = {
-            'transportation': `/activitylog/transportation/${log.id}`,
-            'energy': `/activitylog/energy/${log.id}`,
-            'food': `/activitylog/food/${log.id}`,
-            'shopping': `/activitylog/shopping/${log.id}`,
-        }
-        return routeMap[log.logType] || `/activitylog/${log.id}`
-    }
+// const getLogRoute = (log) => {
+//         // Route to the appropriate log detail page based on log type
+//         const routeMap = {
+//             'transportation': `/activitylog/transportation/${log.id}`,
+//             'energy': `/activitylog/energy/${log.id}`,
+//             'food': `/activitylog/food/${log.id}`,
+//             'shopping': `/activitylog/shopping/${log.id}`,
+//         }
+//         return routeMap[log.logType] || `/activitylog/${log.id}`
+//     }
 
 const getLogs = async () => {
     const user = await getUserByClerkID()
@@ -73,34 +73,89 @@ const SimpleProgressBar = ({ actual, goal = 50 }) => {
                 />
             </div>
             <div className="flex justify-between text-sm">
-                <span>{actual.toFixed(1)} kg CO₂</span>
-                <span className="text-gray-500">Goal: {goal} kg</span>
+                <span>{actual.toFixed(1)} g CO₂</span>
+                <span className="text-gray-500">Goal: {goal} g</span>
             </div>
         </div>
     );
 };
 
 
-const getAIAnalysis = async () => {
+const getAIAnalysis = async (dateRange = 'today') => {
     try {
         const user = await getUserByClerkID();
         
-        // Get all logs
+        // Get today's date in user's local timezone (simple)
+        const today = new Date().toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
+        
+        // Calculate date filters based on the date range
+        let dateFilter = {};
+        
+        switch (dateRange) {
+            case 'today':
+                dateFilter = {
+                    date: {
+                        gte: new Date(today + 'T00:00:00'),
+                        lt: new Date(today + 'T23:59:59')
+                    }
+                };
+                break;
+                
+            case 'week':
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                dateFilter = {
+                    date: {
+                        gte: weekAgo
+                    }
+                };
+                break;
+                
+            case 'month':
+                const monthAgo = new Date();
+                monthAgo.setDate(monthAgo.getDate() - 30);
+                dateFilter = {
+                    date: {
+                        gte: monthAgo
+                    }
+                };
+                break;
+                
+            case 'all':
+            default:
+                // No date filtering
+                dateFilter = {};
+                break;
+        }
+
+        // Get logs with simple date filtering
         const [transportationLogs, energyLogs, foodLogs, shoppingLogs] = await Promise.all([
             prisma.transportationActivityLog.findMany({
-                where: { userId: user.id },
+                where: { 
+                    userId: user.id,
+                    ...dateFilter
+                },
                 orderBy: { createdAt: 'desc' },
             }),
             prisma.energyActivityLog.findMany({
-                where: { userId: user.id },
+                where: { 
+                    userId: user.id,
+                    ...dateFilter
+                },
                 orderBy: { createdAt: 'desc' },
             }),
             prisma.foodActivityLog.findMany({
-                where: { userId: user.id },
+                where: { 
+                    userId: user.id,
+                    ...dateFilter
+                },
                 orderBy: { createdAt: 'desc' },
             }),
             prisma.shoppingActivityLog.findMany({
-                where: { userId: user.id },
+                where: { 
+                    userId: user.id,
+                    ...dateFilter
+                },
                 orderBy: { createdAt: 'desc' },
             }),
         ]);
@@ -128,28 +183,66 @@ const getAIAnalysis = async () => {
     }
 };
 
+
+
 // Updated function to get today's total from AI
-const getTodaysTotal = async () => {
+const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
     const user = await getUserByClerkID();
-    const today = new Date();
+    
+    // Fallback to server timezone if client timezone not provided
+    const timezone = userTimezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('Using timezone:', timezone);
+    
+    // Get current date in specified timezone
+    const now = new Date();
+    const localTime = new Date(now.toLocaleString("en-US", {timeZone: timezone}));
+    
+    // Set to start of day (midnight) in user's timezone
+    const today = new Date(localTime);
     today.setHours(0, 0, 0, 0);
+    
+    // Set to start of tomorrow (midnight) in user's timezone
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     try {
-        // Get today's activities
+        // Get today's activities using user's local timezone dates
         const [transport, energy, food, shopping] = await Promise.all([
             prisma.transportationActivityLog.findMany({
-                where: { userId: user.id, date: { gte: today, lt: tomorrow } }
+                where: { 
+                    userId: user.id, 
+                    date: { 
+                        gte: today, 
+                        lt: tomorrow 
+                    } 
+                }
             }),
             prisma.energyActivityLog.findMany({
-                where: { userId: user.id, date: { gte: today, lt: tomorrow } }
+                where: { 
+                    userId: user.id, 
+                    date: { 
+                        gte: today, 
+                        lt: tomorrow 
+                    } 
+                }
             }),
             prisma.foodActivityLog.findMany({
-                where: { userId: user.id, date: { gte: today, lt: tomorrow } }
+                where: { 
+                    userId: user.id, 
+                    date: { 
+                        gte: today, 
+                        lt: tomorrow 
+                    } 
+                }
             }),
             prisma.shoppingActivityLog.findMany({
-                where: { userId: user.id, date: { gte: today, lt: tomorrow } }
+                where: { 
+                    userId: user.id, 
+                    date: { 
+                        gte: today, 
+                        lt: tomorrow 
+                    } 
+                }
             })
         ]);
 
@@ -261,7 +354,7 @@ const ActivityPage = async () => {
     // Get AI-powered data
     const [carbonData, todaysTotal, aiAnalysis] = await Promise.all([
         getRecentCarbonFootprints(),
-        getTodaysTotal(),
+        getTodaysTotalWithClientTimezone(),
         getAIAnalysis()
     ]);
     
@@ -271,7 +364,7 @@ const ActivityPage = async () => {
         <div className="h-full flex flex-col bg-slate-50/30">
             {/* Fixed Header */}
             <div className="flex-shrink-0 p-6 pb-4">
-                <h2 className="text-3xl mb-6 font-medium text-slate-700">Dashboard</h2>
+                {/* <h2 className="text-3xl mb-6 font-medium text-slate-700">Dashboard</h2> */}
             </div>
 
             {/* Scrollable Content Area */}
@@ -284,7 +377,7 @@ const ActivityPage = async () => {
                             
                             {/* Goal progress bar */}
                             <div className="mb-4">
-                                <SimpleProgressBar actual={todaysTotal} goal={50} />
+                                <SimpleProgressBar actual={todaysTotal} goal={8000} />
                             </div>
                             
                             <div className="mb-6">
@@ -293,25 +386,25 @@ const ActivityPage = async () => {
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Transportation:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.transportation > 0 ? `${carbonData.transportation.toFixed(2)} kg CO₂` : '--'}
+                                            {carbonData.transportation > 0 ? `${carbonData.transportation.toFixed(2)} g CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Food:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.food > 0 ? `${carbonData.food.toFixed(2)} kg CO₂` : '--'}
+                                            {carbonData.food > 0 ? `${carbonData.food.toFixed(2)} g CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Energy:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.energy > 0 ? `${carbonData.energy.toFixed(2)} kg CO₂` : '--'}
+                                            {carbonData.energy > 0 ? `${carbonData.energy.toFixed(2)} g CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Shopping:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.shopping > 0 ? `${carbonData.shopping.toFixed(2)} kg CO₂` : '--'}
+                                            {carbonData.shopping > 0 ? `${carbonData.shopping.toFixed(2)} g CO₂` : '--'}
                                         </span>
                                     </div>
                                 </div>
@@ -342,7 +435,7 @@ const ActivityPage = async () => {
                         <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
                             <h2 className="text-xl font-medium mb-4 text-slate-700">Weekly Carbon Footprint</h2>
                             <div className="h-64">
-                                <CarbonFootprintChart data={chartData} />
+                                <CarbonFootprintChart aiAnalysis={aiAnalysis} />
                             </div>
                         </div>
                     </section>
@@ -351,7 +444,7 @@ const ActivityPage = async () => {
                     <div className="bg-white/60 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm">
                         <h3 className="text-xl font-medium mb-4 text-slate-700">Recent Activities</h3>
                         {logs.length > 0 ? (
-                            <div className="flex flex-row gap-4 overflow-x-auto pb-2">
+                            <div className="flex flex-row gap-4 overflow-x-auto p-2">
                                 {logs.map((log) => (
                                     <EntryCard log={log} key={log.id}/>
                                 ))}

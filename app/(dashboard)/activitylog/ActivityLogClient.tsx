@@ -9,7 +9,7 @@ import CreateShoppingLog from "@/components/CreateShoppingLog"
 // import EntryOptions from "@/components/EntryOptions"
 // import Link from "next/link"
 
-const ActivityLogClient = ({ logs }) => {
+const ActivityLogClient = () => {
     const [selectedLogType, setSelectedLogType] = useState('transportation')
 
     const renderLogForm = () => {
