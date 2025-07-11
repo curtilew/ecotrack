@@ -20,12 +20,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  clerkId String        @unique
-  email   String        @unique
-  entries ActivityLog[]
+  clerkId String                      @unique
+  email   String                      @unique
+  entries TransportationActivityLog[]
 }
 
-model ActivityLog {
+model TransportationActivityLog {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,7 +33,11 @@ model ActivityLog {
   userId String
   user   User   @relation(fields: [userId], references: [id]) //this creates a relationship with another table. primary key -> foreign key ..... need to set up relationship on both sides (entries ActivityLog)
 
-  content String @db.Text
+  activityType    String? // Type of activity (e.g., "transportation", "energy", etc.)
+  date            DateTime? // Date of the activity
+  distance        Float? // Distance covered in the activity (e.g., kilometers for transportation)
+  carbonFootprint Float? // Carbon footprint of the activity in kg CO2
+  note            String?   @db.Text
 
   analysis Analysis? // Optional analysis for the activity log (optional because you cant have an analysis without an activity log)
 
@@ -46,12 +50,15 @@ model Analysis {
   updatedAt DateTime @updatedAt
 
   logId String
-  log   ActivityLog @relation(fields: [logId], references: [id]) // This creates a relationship with the ActivityLog model
+  log   TransportationActivityLog @relation(fields: [logId], references: [id]) // This creates a relationship with the TransportationActivityLog model
 
-  score          Float
-  summary        String @db.Text
-  color          String
-  recommendation String
+  total           Float?
+  goal            Float?
+  progress        Float?
+  progressPercent Float?
+  summary         String? @db.Text
+  color           String?
+  recommendation  String?
 
   @@unique([logId])
 }

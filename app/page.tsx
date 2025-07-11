@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server"
 export default async function Home() {
   const { userId } = await auth();
 
-  const href =  userId ? '/journal' : '/new-user'
+  const href =  userId ? '/dashboard_home' : '/new-user'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">

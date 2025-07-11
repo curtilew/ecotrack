@@ -1,4 +1,5 @@
 import { UserButton } from "@clerk/nextjs"
+import Link from "next/dist/client/link"
 
 
 const DashboardLayout = ({ children }) => {
@@ -19,44 +20,44 @@ const DashboardLayout = ({ children }) => {
         {/* Navigation Links */}
         <nav className="p-4 space-y-2">
           <a 
-            href="/dashboard" 
+            href="/dashboard_home" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">📊</span>
             <span className="font-medium">Dashboard</span>
           </a>
           
-          <a 
-            href="/journal" 
+          <Link 
+            href="/activitylog" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">📝</span>
             <span className="font-medium">Activity Log</span>
-          </a>
+          </Link>
           
-          <a 
+          <Link 
             href="/analytics" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">📈</span>
             <span className="font-medium">Analytics</span>
-          </a>
-          
-          <a 
+          </Link>
+
+          <Link 
             href="/goals" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">🎯</span>
             <span className="font-medium">Goals</span>
-          </a>
-          
-          <a 
+          </Link>
+
+          <Link 
             href="/insights" 
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
           >
             <span className="text-lg">🤖</span>
             <span className="font-medium">AI Insights</span>
-          </a>
+          </Link>
         </nav>
       </div>
 

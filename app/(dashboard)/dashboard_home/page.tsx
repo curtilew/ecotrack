@@ -1,5 +1,5 @@
 // import EntryCard from "@/app/components/EntryCard"
-// import NewEntryCard from "@/app/components/NewEntryCard"
+// import EntryOptions from "@/app/components/EntryOptions"
 // import { analyze } from "@/utils/ai"
 // import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
@@ -8,7 +8,7 @@ import Link from "next/link"
 
 // const getLogs = async () => {
 //     const user = await getUserByClerkID()
-//     const logs = await prisma.activityLog.findMany({
+//     const logs = await prisma.transportationactivitylog.findMany({
 //         where: {
 //             userId: user.id,
 //         },
@@ -27,11 +27,11 @@ const ActivityPage = async () => {
     
     return (
         <div className="p-10 bg-zinc-400/10 h-full">
-            <h2 className="text-3xl mb-8">Journal</h2>
+            <h2 className="text-3xl mb-8">Home</h2>
         {/* <div className="grid grid-cols-3 gap-4">
-        <NewEntryCard />
+        <EntryOptions />
         {logs.map((log) => (
-            <Link href={`/journal/${log.id}`} key={log.id}>
+            <Link href={`/dashboard_home/${log.id}`} key={log.id}>
                 <EntryCard key={log.id} entry={log} />
             </Link>
             

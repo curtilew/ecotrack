@@ -25,7 +25,7 @@ const createNewUser = async () => {
     }
     
     // Always redirect to journal after checking/creating user
-    redirect('/journal')
+    redirect('/dashboard_home')
 }
 
 const NewUser = async () => {
