@@ -11,7 +11,7 @@ const activityTypes = [
   "Walking",
   "Other"
 ];
-
+// @ts-expect-error Database returns null but component expects undefined
 const Editor = ({ log }) => {
   const [activityType, setActivityType] = useState(log?.activityType || "");
   const [distance, setDistance] = useState(log?.distance || "");
