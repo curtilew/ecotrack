@@ -10,9 +10,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="h-screen w-screen relative bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Sidebar Navigation */}
-      <div className="fixed left-0 top-0 w-[240px] h-full bg-white/90 backdrop-blur-sm border-r border-emerald-100 shadow-lg">
+      <div className="fixed left-0 top-0 w-[240px] h-full bg-white/90 backdrop-blur-sm  shadow-lg">
         {/* Logo and Brand */}
-        <div className="h-[70px] flex items-center px-6 border-b border-emerald-100">
+        <div className="h-[70px] flex items-center px-6 ">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-sm">🌱</span>
@@ -88,11 +88,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Main Content Area */}
       <div className="ml-[240px] h-full">
         {/* Header */}
-        <header className="h-[70px] bg-white/80 backdrop-blur-sm border-b border-emerald-100 shadow-sm">
+        <header className="h-[70px]bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 backdrop-blur-sm  ">
           <div className="h-full w-full px-8 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-600">
-                <span className="font-medium text-emerald-600">Welcome back</span> 
+                <span className="font-medium text-emerald-600"><b>Welcome back</b></span> 
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -105,8 +105,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         
         {/* Content Area */}
         <div className="h-[calc(100vh-70px)] overflow-auto">
-          <div className="p-8 h-full">
-            <div className="h-full bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
+          <div className="p-2 h-full">
+            <div className="h-full bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg   p-6">
               {children}
             </div>
           </div>

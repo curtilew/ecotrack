@@ -28,7 +28,7 @@ const ActivityLogClient = ({ logs }) => {
     }
 
     return (
-        <div className="h-full flex flex-col bg-emerald-100/40">
+        <div className="h-full flex flex-col bg-emerald-100/30">
             {/* Fixed Header */}
             <div className="flex-shrink-0 p-6 pb-4">
                 <h2 className="text-3xl mb-6 font-bold text-gray-800">Log New Activity</h2>
