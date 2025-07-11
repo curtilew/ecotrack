@@ -126,11 +126,12 @@ model Analysis {
   foodLog           FoodActivityLog?           @relation(fields: [foodLogId], references: [id])
   shoppingLog       ShoppingActivityLog?       @relation(fields: [shoppingLogId], references: [id])
 
-  total           Float?
-  goal            Float?
-  progress        Float?
-  progressPercent Float?
-  summary         String? @db.Text
-  color           String?
-  recommendation  String?
+  date           DateTime? // Date of the activity
+  total          Float?
+  transportation Float?
+  energy         Float?
+  food           Float?
+  shopping       Float?
+  color          String?
+  recommendation String?
 }
