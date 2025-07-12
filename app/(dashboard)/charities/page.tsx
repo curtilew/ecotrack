@@ -228,11 +228,12 @@ const EnvironmentalCharities = () => {
                       onError={(e) => {
                         // Fallback to org initials if logo fails to load
                         e.currentTarget.style.display = 'none';
+                        // @ts-expect-error - nextElementSibling may not be typed as an HTMLElement, but we need to set its display style
                         e.currentTarget.nextElementSibling.style.display = 'flex';
                       }}
                     />
                     <div 
-                      className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-600 font-bold text-xs text-center hidden"
+                      className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-600 font-bold text-xs text-center"
                       style={{ display: 'none' }}
                     >
                       {charity.name.split(' ').map(word => word[0]).join('').slice(0, 3)}

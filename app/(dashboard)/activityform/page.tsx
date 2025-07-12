@@ -78,6 +78,7 @@ const ActivityFormPage = () => {
             'food': <>Food <Utensils className="inline-block mr-1" /> </>,
             'shopping': <>Shopping <ShoppingBasket className="inline-block mr-1" /> </>,
         }
+        // @ts-expect-error activityType may not match the keys of titles, but this is safe for rendering
         return titles[activityType] || 'Activity'
     }
 

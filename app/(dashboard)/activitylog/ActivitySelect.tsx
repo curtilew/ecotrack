@@ -1,10 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Utensils  } from 'lucide-react'
+
 const ActivitySelector = () => {
     const router = useRouter()
-
+    // @ts-expect-error - activityType is implicitly 'any' because no type is specified
     const handleActivitySelect = (activityType) => {
         // Store activity type and navigate to form page
         localStorage.setItem('selectedActivityType', activityType)
