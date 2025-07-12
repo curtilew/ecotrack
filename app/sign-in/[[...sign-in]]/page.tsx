@@ -149,7 +149,7 @@ const SignInPage = () => {
                             fontSize: "0.875rem", // 14px
                         }
                     }}
-                    redirectUrl="/dashboard"
+                    redirectUrl="/dashboard_home"
                     // Optional: customize sign-up link
                     signUpUrl="/sign-up"
                 />
