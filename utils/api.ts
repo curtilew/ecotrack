@@ -5,7 +5,10 @@ const createURL = (path) => {
 }
 
 // @ts-expect-error Database returns null but component expects undefined
-export const updateEntry = async (id, logData, logType = 'transportation') => {
+export const updateEntry = async (id, logData, logType) => {
+    console.log('Updating entry ID:', id);
+    console.log('Sending data:', logData);
+    console.log('Log type:', logType);
     
     // Map log types to their respective API endpoints
     const routeMap = {
@@ -31,6 +34,8 @@ export const updateEntry = async (id, logData, logType = 'transportation') => {
 
     if (res.ok) {
         const data = await res.json();
+
+
         return data.data;
     } else {
         throw new Error(`Failed to update ${logType} entry`);
@@ -93,6 +98,9 @@ export const createNewEntry = async (entryData, logType) => {
 
     if (res.ok) {
         const data = await res.json();
+
+        localStorage.setItem('formSubmitted', 'true');
+        
         return data.data;
     } else {
         throw new Error(`Failed to create ${logType} entry`);

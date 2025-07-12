@@ -468,11 +468,13 @@ const ActivityPage = async () => {
                         {logs.length > 0 ? (
                             <div className="flex flex-row gap-4 overflow-x-auto p-2">
                                 {logs.map((log) => (
+                                    <Link href={`/logupdate/${log.id}`} key={log.id}>
                                     <EntryCard
                                         // @ts-expect-error Database returns null but component expects undefined
                                         log={log}
                                         key={log.id}
                                     />
+                                    </Link>
                                 ))}
                             </div>
                         ) : (
