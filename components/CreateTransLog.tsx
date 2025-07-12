@@ -15,7 +15,7 @@ const activityTypes = [
 const CreateTransLog = () => {
   const [activityType, setActivityType] = useState("");
   const [distance, setDistance] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

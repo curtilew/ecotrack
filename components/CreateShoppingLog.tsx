@@ -22,7 +22,7 @@ const CreateShoppingLog = () => {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [isSecondHand, setIsSecondHand] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

@@ -21,7 +21,7 @@ const CreateFoodLog = () => {
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("servings");
   const [mealType, setMealType] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

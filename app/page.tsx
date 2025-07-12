@@ -16,9 +16,11 @@ export default async function Home() {
           </div>
           <span className="text-xl font-bold text-gray-800">EcoTrack</span>
         </div>
-        <button className="text-gray-600 hover:text-emerald-600 transition-colors">
-          Sign In
-        </button>
+        <Link href="/sign-in">
+          <button className="text-gray-600 hover:text-emerald-600 transition-colors">
+            Sign In
+          </button>
+        </Link>
       </nav>
 
       {/* Hero Section */}

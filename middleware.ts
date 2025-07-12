@@ -20,7 +20,7 @@ export default clerkMiddleware(async (auth, request) => {
 
 
       if (!userId) {
-        const signInUrl = new URL('/sign-in', request.url);
+        const signInUrl = new URL('/sign-up', request.url);
 
         // Add a 'redirect_url' search parameter so Clerk knows where to send
         // the user back to after they log in.
