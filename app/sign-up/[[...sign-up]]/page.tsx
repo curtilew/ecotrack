@@ -131,6 +131,7 @@ const SignUpPage = () => {
                             borderRadius: "1rem",
                             fontFamily: '"Inter", "SF Pro Text", -apple-system, system-ui, sans-serif',
                             fontSize: "1rem",
+                            // @ts-expect-error: fontWeight is not a recognized variable in Clerk appearance config, but needed for custom font weight
                             fontWeight: "300"
                         }
                     }}
