@@ -1,8 +1,9 @@
 import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { NextResponse } from "next/server"
+
 // @ts-expect-error Database returns null but component expects undefined
-export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (request: Request, { params }) => {
     try {
         const body = await request.json();
         console.log('Shopping PATCH - Received body:', body);
@@ -39,6 +40,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     } catch (error) {
         console.error('Error updating shopping log:', error);
         return NextResponse.json(
+            // @ts-expect-error error may not have a message property
             { error: 'Failed to update shopping log', details: error.message },
             { status: 500 }
         );

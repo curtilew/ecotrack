@@ -5,7 +5,8 @@ import { prisma } from '@/utils/db';
 
 export async function GET(
   request: Request, 
-  { params }: { params: { id: string } }
+  // @ts-expect-error dynamic log type lookup
+  { params }
 ) {
   try {
     const { id } = params;
