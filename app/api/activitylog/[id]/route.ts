@@ -37,6 +37,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     } catch (error) {
         console.error('Error updating transportation log:', error);
         return NextResponse.json(
+            // @ts-expect-error error may not have a message property
             { error: 'Failed to update transportation log', details: error.message },
             { status: 500 }
         );

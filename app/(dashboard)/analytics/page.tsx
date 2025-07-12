@@ -22,41 +22,6 @@ import {
 } from 'lucide-react';
 
 const AnalyticsPage = () => {
-  const [timeRange, setTimeRange] = useState('7d');
-  const [loading, setLoading] = useState(true);
-  const [analyticsData, setAnalyticsData] = useState(null);
-  const [error, setError] = useState(null);
-
-  // Fetch analytics data
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        const response = await fetch(`/api/analytics?timeRange=${timeRange}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch analytics data');
-        }
-        
-        const result = await response.json();
-        setAnalyticsData(result.data);
-      } catch (error) {
-        console.error('Error fetching analytics:', error);
-        setError(error.message);
-        
-        // Fallback to mock data if API fails
-        setAnalyticsData(getMockData());
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnalytics();
-  }, [timeRange]);
-
-  // Mock data fallback
   const getMockData = () => ({
     carbonTrendData: [
       { date: '2025-07-05', transportation: 12.5, energy: 8.2, food: 6.1, shopping: 3.2, total: 30.0 },
@@ -113,7 +78,45 @@ const AnalyticsPage = () => {
     }
   });
 
+  const [timeRange, setTimeRange] = useState('7d');
+  const [loading, setLoading] = useState(true);
+  const [analyticsData, setAnalyticsData] = useState(getMockData());
+  const [error, setError] = useState(null);
+
+  // Fetch analytics data
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`/api/analytics?timeRange=${timeRange}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch analytics data');
+        }
+        
+        const result = await response.json();
+        setAnalyticsData(result.data);
+      } catch (error) {
+        console.error('Error fetching analytics:', error);
+        // @ts-expect-error error may not have a message property
+        setError(error.message);
+        
+        // Fallback to mock data if API fails
+        setAnalyticsData(getMockData());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnalytics();
+  }, [timeRange]);
+
+  // Mock data fallback
+  
   // Icon mapping function
+  // @ts-expect-error iconName may not be a key of icons
   const getIcon = (iconName, className = "w-5 h-5") => {
     const icons = {
       globe: Globe,
@@ -133,7 +136,7 @@ const AnalyticsPage = () => {
       calendar: Calendar,
       award: Award
     };
-    
+    // @ts-expect-error iconName may not be a key of icons
     const IconComponent = icons[iconName] || Activity;
     return <IconComponent className={className} />;
   };

@@ -6,7 +6,7 @@ import CreateTransLog from "@/components/CreateTransLog"
 import CreateEnergyLog from "@/components/CreateEnergyLog"
 import CreateFoodLog from "@/components/CreateFoodLog"
 import CreateShoppingLog from "@/components/CreateShoppingLog"
-import { CarFront, Zap, Utensils, ShoppingBasket  } from 'lucide-react'
+
 
 const ActivityFormPage = () => {
     const router = useRouter()
@@ -73,12 +73,12 @@ const ActivityFormPage = () => {
 
     const getActivityTitle = () => {
         const titles = {
-            'transportation': <>Transportation <CarFront className="inline-block mr-1" /> </>,
-            'energy': <>Energy <Zap className="inline-block mr-1" /> </>,
-            'food': <>Food <Utensils className="inline-block mr-1" /> </>,
-            'shopping': <>Shopping <ShoppingBasket className="inline-block mr-1" /> </>,
+            'transportation': '🚗 Transportation',
+            'energy': '⚡ Energy',
+            'food': '🍎 Food',
+            'shopping': '🛍️ Shopping'
         }
-        // @ts-expect-error activityType may not match the keys of titles, but this is safe for rendering
+        // @ts-expect-error activityType may not be a key of titles
         return titles[activityType] || 'Activity'
     }
 

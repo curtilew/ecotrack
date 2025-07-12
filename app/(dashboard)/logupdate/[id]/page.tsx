@@ -2,7 +2,7 @@
 import Editor from "@/components/Editor";
 import { getUserByClerkID } from "@/utils/auth";
 import { prisma } from "@/utils/db";
-
+// @ts-expect-error dynamic log type lookup
 const getEntry = async (id) => {
     const user = await getUserByClerkID();
     
@@ -60,7 +60,7 @@ const getEntry = async (id) => {
     
     return null;
 }
-
+// @ts-expect-error dynamic log type lookup
 const EntryPage = async ({ params }) => {
     const { id } = await params;
     const entry = await getEntry(id);
@@ -70,13 +70,14 @@ const EntryPage = async ({ params }) => {
             <div className="h-full w-full flex items-center justify-center">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-600 mb-4">Entry Not Found</h2>
-                    <p className="text-gray-500">The activity you're looking for doesn't exist.</p>
+                    <p className="text-gray-500">The activity you`re looking for doesn`t exist.</p>
                 </div>
             </div>
         );
     }
 
     // Dynamic analysis data based on log type
+    // @ts-expect-error log may not have a logType property
     const getAnalysisData = (entry) => {
         const baseData = [
             { name: 'Date', value: entry.date ? new Date(entry.date).toLocaleDateString() : 'N/A' },

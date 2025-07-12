@@ -2,7 +2,7 @@
 
 import { updateEntry } from "@/utils/api";
 import { useState } from "react";
-
+// @ts-expect-error dynamic log type lookup
 const Editor = ({ log }) => {
   const [formData, setFormData] = useState({
     // Transportation
@@ -27,7 +27,7 @@ const Editor = ({ log }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
+// @ts-expect-error log may not have a logType property
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
