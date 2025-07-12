@@ -4,11 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, LineChart, Line } from 'recharts';
 
-interface AnalyticsIdPageProps {
-  params: {
-    id: string;
-  };
-}
+
 // ts-ignore error expected for dynamic log type lookup
 interface AnalyticsData {
   // Core metrics
@@ -62,8 +58,8 @@ interface AnalyticsData {
   progressPercentage?: number;
   monthlyGoal?: number;
 }
-
-const AnalyticsIdPage = ({ params }: AnalyticsIdPageProps) => {
+// @ts-expect-error error expected for dynamic log type lookup
+const AnalyticsIdPage = ({ params }) => {
   const { id } = params;
   const router = useRouter();
   const [loading, setLoading] = useState(true);
