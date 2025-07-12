@@ -43,11 +43,13 @@ export default async function Home() {
               Get Started Free
             </button>
             </Link>
+            <Link href={href}>
             <button className="text-emerald-600 hover:text-emerald-700 font-semibold py-3 px-8 rounded-lg border-2 border-emerald-600 hover:bg-emerald-50 transition-all duration-200">
               Learn More
             </button>
-          </div>
+          </Link>
         </div>
+      </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 mt-24">
@@ -89,7 +91,7 @@ export default async function Home() {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-24 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        {/* <div className="mt-24 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl font-bold text-emerald-600 mb-2">2.4T</div>
@@ -108,7 +110,7 @@ export default async function Home() {
               <div className="text-sm text-gray-600">Activities Logged</div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Footer */}
