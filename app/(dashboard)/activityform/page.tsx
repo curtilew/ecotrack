@@ -6,6 +6,7 @@ import CreateTransLog from "@/components/CreateTransLog"
 import CreateEnergyLog from "@/components/CreateEnergyLog"
 import CreateFoodLog from "@/components/CreateFoodLog"
 import CreateShoppingLog from "@/components/CreateShoppingLog"
+import { CarFront, Zap, Utensils, ShoppingBasket  } from 'lucide-react'
 
 const ActivityFormPage = () => {
     const router = useRouter()
@@ -72,10 +73,10 @@ const ActivityFormPage = () => {
 
     const getActivityTitle = () => {
         const titles = {
-            'transportation': '🚗 Transportation',
-            'energy': '⚡ Energy',
-            'food': '🍎 Food',
-            'shopping': '🛍️ Shopping'
+            'transportation': <>Transportation <CarFront className="inline-block mr-1" /> </>,
+            'energy': <>Energy <Zap className="inline-block mr-1" /> </>,
+            'food': <>Food <Utensils className="inline-block mr-1" /> </>,
+            'shopping': <>Shopping <ShoppingBasket className="inline-block mr-1" /> </>,
         }
         return titles[activityType] || 'Activity'
     }

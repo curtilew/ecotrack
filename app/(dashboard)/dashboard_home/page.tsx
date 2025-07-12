@@ -383,14 +383,16 @@ const ActivityPage = async () => {
     // const chartData = await getDailyCarbonByCategory(7);
 
     return (
-        <div className="h-full flex flex-col bg-slate-50/30">
+        <div className="h-full flex flex-col bg-gradient-to-br from-emerald-50 to-blue-50">
             {/* Fixed Header */}
-            <div className="flex-shrink-0 p-6 pb-4">
-                {/* <h2 className="text-3xl mb-6 font-medium text-slate-700">Dashboard</h2> */}
-            </div>
+            <div className=" p-6 pb-4"></div>
 
             {/* Scrollable Content Area */}
             <div className="flex-1 overflow-auto px-6 pb-6">
+                <div className="flex items-center gap-3 mb-2">
+                {/* {getIcon('activity', 'w-8 h-8 text-blue-600')} */}
+                <h1 className="text-3xl font-bold text-gray-900 pb-4">Dashboard</h1>
+                </div>
                 <div className="space-y-6">
                     {/* Main Dashboard Cards */}
                     <section className="flex justify-between gap-6">

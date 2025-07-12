@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
-
+import { Hammer} from 'lucide-react'
 // Add this at the top of your component
 
 interface DashboardLayoutProps {
@@ -60,38 +60,62 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <span className="font-medium">Analytics</span>
           </Link>
 
-          <Link 
-            href="/goals" 
-            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
-              pathname === '/goals' ? 'bg-emerald-100 !text-emerald-700' : ''
-            }`}
-          >
-            <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Goals</span>
-          </Link>
+          <div className="relative group">
+              <div 
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 cursor-not-allowed opacity-60"
+              >
+                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                <span className="font-medium">Goals</span>
+              </div>
+              
+              {/* Tooltip */}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+                <Hammer size={14} /> Coming Soon
+              </div>
+          </div>
 
           <div className="pt-4 pb-2">
             <div className="text-xs font-medium text-gray-400 uppercase tracking-wider px-4">Community</div>
           </div>
 
-          <Link 
-            href="/communityleaderboard" 
-            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
-              pathname === '/communityleaderboard' ? 'bg-emerald-100 !text-emerald-700' : ''
-            }`}
-          >
-            <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Leaderboard</span>
-          </Link>
+
+          <div className="relative group">
+            <div 
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 cursor-not-allowed opacity-60"
+            >
+              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+              <span className="font-medium">Leaderboard</span>
+            </div>
+            
+            {/* Tooltip */}
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+              <Hammer size={14} /> Coming Soon
+            </div>
+          </div>
+
+          <div className="relative group">
+            <div 
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 cursor-not-allowed opacity-60"
+            >
+              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+              <span className="font-medium">Share Progress</span>
+            </div>
+            
+            {/* Tooltip */}
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+              <Hammer size={14} /> Coming Soon
+            </div>
+          </div>
+
 
           <Link 
-            href="/socialsharing" 
+            href="/charities" 
             className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
-              pathname === '/socialsharing' ? 'bg-emerald-100 !text-emerald-700' : ''
+              pathname === '/charities' ? 'bg-emerald-100 !text-emerald-700' : ''
             }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Share Progress</span>
+            <span className="font-medium">Impact Partners</span>
           </Link>
         </nav>
 

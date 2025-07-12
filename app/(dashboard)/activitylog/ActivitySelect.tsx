@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-
+import { Utensils  } from 'lucide-react'
 const ActivitySelector = () => {
     const router = useRouter()
 
@@ -12,17 +12,17 @@ const ActivitySelector = () => {
     }
 
  const activities = [
-    {
-      type: 'transportation',
-      icon: 'M13 16V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h1m8-1a1 1 0 0 1-1 1H9m4-1V8a1 1 0 0 1 1-1h2.586a1 1 0 0 1 .707.293l1.414 1.414a1 1 0 0 1 .293.707V16a1 1 0 0 1-1 1h-1m-6-1a1 1 0 0 1 1-1H20a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-3z',
-      iconViewBox: '0 0 24 24',
-      title: 'Transportation',
-      description: 'Track your commute and travel',
-      color: 'from-emerald-100 to-emerald-200',
-      hoverColor: 'hover:from-emerald-200 hover:to-emerald-300',
-      textColor: 'text-emerald-800',
-      iconColor: 'text-emerald-600'
-    },
+{
+  type: 'transportation',
+  icon: 'M3 13h1l1-2h14l1 2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1.5a2.5 2.5 0 0 1-5 0h-7a2.5 2.5 0 0 1-5 0H2a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zm15.5 4.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm-12 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zM6 11V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4',
+  iconViewBox: '0 0 24 24',
+  title: 'Transportation',
+  description: 'Track your commute and travel',
+  color: 'from-emerald-100 to-emerald-200',
+  hoverColor: 'hover:from-emerald-200 hover:to-emerald-300',
+  textColor: 'text-emerald-800',
+  iconColor: 'text-emerald-600'
+},
     {
       type: 'energy',
       icon: 'M13 10V3L4 14h7v7l9-11h-7z',
@@ -34,17 +34,17 @@ const ActivitySelector = () => {
       textColor: 'text-emerald-700',
       iconColor: 'text-emerald-500'
     },
-    {
-      type: 'food',
-      icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
-      iconViewBox: '0 0 24 24',
-      title: 'Food',
-      description: 'Log your meals and diet',
-      color: 'from-emerald-100 to-emerald-150',
-      hoverColor: 'hover:from-emerald-150 hover:to-emerald-200',
-      textColor: 'text-emerald-800',
-      iconColor: 'text-emerald-600'
-    },
+{
+  type: 'food',
+  icon: 'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97L7 22h2l.25-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-7v8h2.5l1.5 11h2L20.5 10H22V2h-6z',
+  iconViewBox: '0 0 24 24',
+  title: 'Food',
+  description: 'Log your meals and diet',
+  color: 'from-emerald-100 to-emerald-150',
+  hoverColor: 'hover:from-emerald-150 hover:to-emerald-200',
+  textColor: 'text-emerald-800',
+  iconColor: 'text-emerald-600'
+},
     {
       type: 'shopping',
       icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19M7 13v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4m-8 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z',

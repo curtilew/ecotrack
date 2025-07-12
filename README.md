@@ -17,48 +17,66 @@ A Next.js web application that helps users track their daily carbon footprint ac
 
 ```
 ecotrack/
-├── app/                          # Next.js app directory
+├── app/                          # Next.js App Router directory
 │   ├── (dashboard)/             # Dashboard route group (protected routes)
-│   │   ├── activitylog/         # Activity logging functionality
+│   │   ├── activityformpage/    # Activity form page for logging
+│   │   ├── activitylog/         # Activity log listing and management
 │   │   │   └── [id]/            # Dynamic route for individual activity editing
-│   │   ├── analytics/           # Data analytics and insights page
-│   │   └── dashboard_home/      # Main dashboard overview
-│   ├── api/                     # API routes for data operations
+│   │   ├── log-activity/        # Activity type selector page
+│   │   └── layout.tsx           # Dashboard layout with sidebar navigation
+│   ├── api/                     # API routes for backend operations
 │   │   ├── activitylog/         # General activity log endpoints
 │   │   │   └── [id]/            # Individual activity CRUD operations
 │   │   ├── energylog/           # Energy-specific logging endpoints
 │   │   │   └── [id]/            # Energy activity CRUD operations
 │   │   ├── foodlog/             # Food-specific logging endpoints
 │   │   │   └── [id]/            # Food activity CRUD operations
-│   │   └── shoppinglog/         # Shopping-specific logging endpoints
-│   │       └── [id]/            # Shopping activity CRUD operations
-│   ├── generated/               # Auto-generated files
-│   │   └── prisma/              # Prisma client generation
-│   │       └── runtime/         # Prisma runtime files
+│   │   ├── shoppinglog/         # Shopping-specific logging endpoints
+│   │   │   └── [id]/            # Shopping activity CRUD operations
+│   │   └── translog/            # Transportation-specific logging endpoints
+│   │       └── [id]/            # Transportation activity CRUD operations
 │   ├── new-user/                # New user onboarding flow
 │   ├── sign-in/                 # Authentication pages
 │   │   └── [[...sign-in]]/      # Clerk sign-in catch-all routes
 │   ├── sign-up/                 # User registration pages
 │   │   └── [[...sign-up]]/      # Clerk sign-up catch-all routes
+│   ├── globals.css              # Global CSS styles
 │   ├── layout.tsx               # Root layout component
 │   └── page.tsx                 # Landing/home page
 ├── components/                   # Reusable UI components
+│   ├── ActivityFormPage.tsx     # Main activity form container
+│   ├── ActivitySelector.tsx     # Activity type selector
 │   ├── CreateTransLog.tsx       # Transportation logging form
 │   ├── CreateEnergyLog.tsx      # Energy logging form
 │   ├── CreateFoodLog.tsx        # Food logging form
 │   ├── CreateShoppingLog.tsx    # Shopping logging form
+│   ├── Editor.tsx               # Activity edit form component
 │   ├── EntryCard.tsx            # Activity display card
 │   ├── EntryOptions.tsx         # Activity category selector
-│   └── Editor.tsx               # Activity edit form
+│   └── EnvironmentalCharities.tsx # Environmental impact partners page
 ├── utils/                       # Utility functions and helpers
+│   ├── ai.ts                    # AI integration utilities
 │   ├── api.ts                   # API helper functions
-│   ├── auth.ts                  # Authentication utilities
-│   └── db.ts                    # Database connection
+│   ├── auth.ts                  # Authentication utilities (Clerk)
+│   └── db.ts                    # Database connection (Prisma)
 ├── prisma/                      # Database schema and configuration
 │   └── schema.prisma            # Database schema definitions
 ├── public/                      # Static assets
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── node_modules/                # Dependencies (auto-generated)
+├── .next/                       # Next.js build output (auto-generated)
 ├── middleware.ts                # Route protection middleware
-└── package.json                 # Dependencies and scripts
+├── next.config.mjs              # Next.js configuration
+├── postcss.config.mjs           # PostCSS configuration
+├── tailwind.config.ts           # Tailwind CSS configuration
+├── tsconfig.json                # TypeScript configuration
+├── package.json                 # Dependencies and scripts
+├── package-lock.json            # Lock file for dependencies
+└── README.md                    # Project documentation
 ```
 
 ## Setup & Installation
@@ -96,6 +114,7 @@ ecotrack/
    ```bash
    npx prisma generate
    npx prisma db push
+
    ```
 
 5. **Run development server**
