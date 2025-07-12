@@ -2,8 +2,8 @@ import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
 import { NextResponse } from "next/server"
 
-
-export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
+// @ts-expect-error dynamic log type lookup
+export const PATCH = async (request: Request, { params }) => {
     try {
         const body = await request.json();
         console.log('Transportation PATCH - Received body:', body);
