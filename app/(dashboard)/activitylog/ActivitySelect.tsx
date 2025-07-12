@@ -28,7 +28,7 @@ const ActivitySelector = () => {
       icon: 'M13 10V3L4 14h7v7l9-11h-7z',
       iconViewBox: '0 0 24 24',
       title: 'Energy',
-      description: 'Monitor home energy usage',
+      description: 'Input home & EV energy usage',
       color: 'from-emerald-50 to-emerald-100',
       hoverColor: 'hover:from-emerald-100 hover:to-emerald-200',
       textColor: 'text-emerald-700',

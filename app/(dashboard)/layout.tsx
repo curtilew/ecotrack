@@ -1,12 +1,19 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
+import { usePathname } from 'next/navigation';
+
+// Add this at the top of your component
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  const pathname = usePathname();
+
   return (
     <div className="h-screen w-screen relative bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Sidebar Navigation */}
@@ -25,7 +32,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <nav className="p-6 space-y-2">
           <Link 
             href="/dashboard_home" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/dashboard_home' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Overview</span>
@@ -33,7 +42,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           
           <Link 
             href="/activitylog" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/activitylog' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Activity Log</span>
@@ -41,7 +52,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           
           <Link 
             href="/analytics" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/analytics' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Analytics</span>
@@ -49,7 +62,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <Link 
             href="/goals" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/goals' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Goals</span>
@@ -61,7 +76,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <Link 
             href="/communityleaderboard" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/communityleaderboard' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Leaderboard</span>
@@ -69,7 +86,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <Link 
             href="/socialsharing" 
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group"
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 group ${
+              pathname === '/socialsharing' ? 'bg-emerald-100 !text-emerald-700' : ''
+            }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
             <span className="font-medium">Share Progress</span>
@@ -92,7 +111,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="h-full w-full px-8 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-600">
-                <span className="font-medium text-emerald-600"><b>Welcome back</b></span> 
+                <span className="text-xl font-medium text-emerald-800/50"><b>Welcome back!</b></span> 
               </div>
             </div>
             <div className="flex items-center space-x-4">
