@@ -25,7 +25,7 @@ const DailyImpactVisualization = ({ yesterdayData = 45.2 }) => {
   };
 
   const impactLevel = getImpactLevel();
-
+//@ts-expect-error: getVisualization is not typed
   const getVisualization = () => {        // add ai notes 
     switch (impactLevel) {
       case 'excellent':
@@ -89,6 +89,7 @@ const DailyImpactVisualization = ({ yesterdayData = 45.2 }) => {
         };
       
       default:
+        //@ts-expect-error: default case is not typed
         return getVisualization.call(this, 'good');
     }
   };
@@ -134,12 +135,13 @@ const DailyImpactVisualization = ({ yesterdayData = 45.2 }) => {
 
   return (
     <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
-      <h2 className="text-xl font-medium mb-4 text-slate-700">Yesterday's Impact on Earth</h2>
+      <h2 className="text-xl font-medium mb-4 text-slate-700">Yesterday&apos;s Impact on Earth</h2>
       
       <div className={`relative h-64 rounded-xl bg-gradient-to-br ${visual.background} overflow-hidden border-2 ${impactLevel === 'devastating' ? 'border-red-600' : 'border-slate-200'}`}>
         
         {/* Animated background effects */}
         <div className="absolute inset-0">
+          {/* @ts-expect-error: effects is not typed */}
           {visual.effects.map((effect, index) => (
             <div
               key={index}

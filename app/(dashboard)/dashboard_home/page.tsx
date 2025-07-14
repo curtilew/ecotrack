@@ -6,7 +6,7 @@ import { prisma } from "@/utils/db"
 import Link from "next/link"
 import EntryCard from "@/components/EntryCard"
 import { getUserByClerkID } from "@/utils/auth"
-import CarbonFootprintChart from "@/components/Chart"
+// import CarbonFootprintChart from "@/components/Chart"
 import { analyzeTotal } from "@/utils/ai"
 import ImpactLevelVisualization from "@/components/ImpactLevel"
 
