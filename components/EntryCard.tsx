@@ -100,12 +100,12 @@ const EntryCard = ({ log }: { log: Log }) => {
           {info.detail}
         </div>
         
-        {/* Carbon footprint display */}
+        {/* Carbon footprint display
         {log.carbonFootprint && (
           <div className="mt-2 text-xs text-emerald-700 font-medium">
             {log.carbonFootprint} kg CO₂
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Note section */}

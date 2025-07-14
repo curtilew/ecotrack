@@ -7,7 +7,7 @@ const parser = StructuredOutputParser.fromZodSchema(
     z.object({
         total: z
             .number()
-            .describe('The estimated total CO2 carbon footprint in grams (g) as a decimal number with up to 2 decimal places'),
+            .describe('The estimated total CO2 carbon footprint in kilograms (kg) as a decimal number with up to 2 decimal places'),
         breakdown: z.object({
             transportation: z.number().optional().describe('CO2 from transportation activities in g'),
             energy: z.number().optional().describe('CO2 from energy consumption in g'),
@@ -30,7 +30,7 @@ const getPromptForCarbonTotal = async (content) => {
         template: 
             "You are an expert carbon footprint analyst specializing in calculating accurate CO2 emissions from activity data.\n\n" +
             "CONTEXT: You're analyzing activity log entries from EcoTrack, a personal carbon footprint tracking application. Users log activities across four categories: Transportation, Energy, Food, and Shopping.\n\n" +
-            "TASK: Calculate the total carbon footprint in grams of CO2 equivalent (g CO2e) for the given activity data.\n\n" +
+            "TASK: Calculate the total carbon footprint in kilograms of CO2 equivalent (kg CO2e) for the given activity data.\n\n" +
             "CALCULATION GUIDELINES:\n" +
             "- Use scientifically-backed emission factors from reputable sources (EPA, DEFRA, etc.)\n" +
             "- For transportation: Consider fuel type, vehicle efficiency, distance\n" +

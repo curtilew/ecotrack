@@ -82,6 +82,21 @@ const AnalyticsPage = () => {
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState(getMockData());
   const [error, setError] = useState(null);
+  
+  // ML Prediction state
+  const [mlPrediction, setMlPrediction] = useState(null);
+  const [showPrediction, setShowPrediction] = useState(true);
+
+  // Fetch ML prediction
+  const fetchMLPrediction = async () => {
+    try {
+      const response = await fetch('/api/ml-predict');
+      const data = await response.json();
+      setMlPrediction(data);
+    } catch (error) {
+      console.error('Failed to fetch ML prediction:', error);
+    }
+  };
 
   // Fetch analytics data
   useEffect(() => {
@@ -111,10 +126,71 @@ const AnalyticsPage = () => {
     };
 
     fetchAnalytics();
+    fetchMLPrediction();
   }, [timeRange]);
 
-  // Mock data fallback
-  
+  // Combine historical data with ML predictions
+  const getCombinedData = () => {
+    const { carbonTrendData } = analyticsData;
+    
+    if (!showPrediction || !mlPrediction?.predictions) {
+      return carbonTrendData.map(d => ({ ...d, isPrediction: false }));
+    }
+
+    // Get last date from historical data
+    const lastDate = new Date(carbonTrendData[carbonTrendData.length - 1]?.date || new Date());
+    
+    // Create prediction data points
+    const predictionData = mlPrediction.predictions.map((value, index) => {
+      const futureDate = new Date(lastDate);
+      futureDate.setDate(futureDate.getDate() + index + 1);
+      
+      return {
+        date: futureDate.toISOString(),
+        total: value,
+        isPrediction: true
+      };
+    });
+
+    // Combine historical + predictions
+    return [
+      ...carbonTrendData.map(d => ({ ...d, isPrediction: false })),
+      ...predictionData
+    ];
+  };
+
+  // Custom tooltip for chart
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      const isPrediction = data.isPrediction;
+      
+      return (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+          <p className="text-sm font-medium text-gray-900">
+            {new Date(label).toLocaleDateString()}
+          </p>
+          <p className="text-sm">
+            <span className={isPrediction ? "text-emerald-600" : "text-blue-600"}>
+              {`${payload[0].value.toFixed(2)} kg CO₂`}
+            </span>
+            {isPrediction && (
+              <span className="ml-2 text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">
+                ML Predicted
+              </span>
+            )}
+          </p>
+          {isPrediction && mlPrediction && (
+            <p className="text-xs text-gray-500 mt-1">
+              🤖 Neural Network • {mlPrediction.accuracy}% accuracy
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
   // Icon mapping function
   // @ts-expect-error iconName may not be a key of icons
   const getIcon = (iconName, className = "w-5 h-5") => {
@@ -170,14 +246,15 @@ const AnalyticsPage = () => {
   }
 
   const {
-    carbonTrendData,
     categoryBreakdown,
     weeklyComparison,
     achievements,
     insights,
     keyMetrics
   } = analyticsData;
-//"h-full flex flex-col bg-gradient-to-br from-emerald-50 to-blue-50"
+
+  const combinedData = getCombinedData();
+
   return (
     <div className="h-full overflow-auto bg-gradient-to-br from-emerald-50 to-blue-50">
       <div className="max-w-8xl mx-auto p-6">
@@ -290,14 +367,46 @@ const AnalyticsPage = () => {
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Carbon Footprint Trend */}
+          {/* Carbon Footprint Trend with ML Prediction */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center gap-2 mb-4">
-              {getIcon('trending', 'w-5 h-5 text-gray-700')}
-              <h3 className="text-lg font-semibold text-gray-900">Carbon Footprint Trend</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                {getIcon('trending', 'w-5 h-5 text-gray-700')}
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Carbon Footprint Trend
+                  {mlPrediction?.accuracy > 0 && (
+                    <span className="ml-2 text-sm font-normal text-emerald-600">
+                      + AI Prediction
+                    </span>
+                  )}
+                </h3>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                {mlPrediction?.accuracy > 0 && (
+                  <div className="text-xs text-gray-600">
+                    <span className="font-medium text-emerald-600">
+                      🧠 {mlPrediction.accuracy}%
+                    </span> ML accuracy
+                  </div>
+                )}
+                {mlPrediction?.predictions && (
+                  <button
+                    onClick={() => setShowPrediction(!showPrediction)}
+                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                      showPrediction 
+                        ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {showPrediction ? 'Hide' : 'Show'} ML Prediction
+                  </button>
+                )}
+              </div>
             </div>
+
             <ResponsiveContainer width="100%" height={240}>
-              <AreaChart data={carbonTrendData}>
+              <AreaChart data={combinedData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="date" 
@@ -306,31 +415,96 @@ const AnalyticsPage = () => {
                   stroke="#64748b"
                 />
                 <YAxis fontSize={12} stroke="#64748b" />
-                <Tooltip 
-                  labelFormatter={(value) => new Date(value).toLocaleDateString()}
-                  formatter={(value, name) => [`${value} kg CO₂`, name]}
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                />
+                <Tooltip content={<CustomTooltip />} />
+                
+                {/* Historical Data */}
                 <Area 
                   type="monotone" 
-                  dataKey="total" 
+                  dataKey={(entry) => entry.isPrediction ? null : entry.total}
                   stroke="#3B82F6" 
                   fill="url(#colorBlue)"
                   strokeWidth={3}
+                  connectNulls={false}
                 />
+                
+                {/* ML Prediction Data */}
+                {showPrediction && (
+                  <Area 
+                    type="monotone" 
+                    dataKey={(entry) => entry.isPrediction ? entry.total : null}
+                    stroke="#10B981"
+                    fill="url(#colorGreen)"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    connectNulls={true}
+                    dot={(props) => {
+                      if (!props.payload?.isPrediction) return null;
+                      const { key, dataKey, ...restProps } = props;
+                      return (
+                        <circle 
+                          key={key}
+                          {...restProps} 
+                          r={3} 
+                          fill="#10B981" 
+                          stroke="#10B981" 
+                          strokeWidth={2}
+                        />
+                      );
+                    }}
+                  />
+                )}
+                
                 <defs>
                   <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.2}/>
                     <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.05}/>
                   </linearGradient>
+                  <linearGradient id="colorGreen" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0.02}/>
+                  </linearGradient>
                 </defs>
               </AreaChart>
             </ResponsiveContainer>
+
+            {/* ML Summary */}
+            {showPrediction && mlPrediction?.predictions && (
+              <div className="mt-4 bg-emerald-50 rounded-lg p-3">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center space-x-4">
+                    <div>
+                      <span className="text-emerald-600 font-medium">7-Day Forecast:</span>
+                      <span className="ml-1 font-semibold">
+                        {mlPrediction.predictions.reduce((sum, p) => sum + p, 0).toFixed(1)} kg CO₂
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-emerald-600 font-medium">Avg/Day:</span>
+                      <span className="ml-1 font-semibold">
+                        {(mlPrediction.predictions.reduce((sum, p) => sum + p, 0) / 7).toFixed(1)} kg CO₂
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    🤖 Neural Network Prediction
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Legend */}
+            <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-gray-500">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-2 bg-blue-500 rounded"></div>
+                <span>Historical Data</span>
+              </div>
+              {showPrediction && mlPrediction?.predictions && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-2 bg-emerald-500 rounded opacity-60 border border-emerald-500 border-dashed"></div>
+                  <span>ML Prediction</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Category Breakdown */}

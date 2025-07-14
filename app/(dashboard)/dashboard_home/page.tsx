@@ -8,7 +8,7 @@ import EntryCard from "@/components/EntryCard"
 import { getUserByClerkID } from "@/utils/auth"
 import CarbonFootprintChart from "@/components/Chart"
 import { analyzeTotal } from "@/utils/ai"
-
+import ImpactLevelVisualization from "@/components/ImpactLevel"
 
 
 // const getLogRoute = (log) => {
@@ -65,7 +65,7 @@ type SimpleProgressBarProps = {
 };
 
 const SimpleProgressBar = ({ actual, goal = 50 }: SimpleProgressBarProps) => {
-    const percentage = Math.min((actual / goal) * 100, 100);
+    const percentage = Math.min((actual / goal) * 100 * 1000, 100);
     const isOver = actual > goal;
     
     return (
@@ -78,8 +78,8 @@ const SimpleProgressBar = ({ actual, goal = 50 }: SimpleProgressBarProps) => {
                 />
             </div>
             <div className="flex justify-between text-sm">
-                <span>{actual.toFixed(1)} g CO₂</span>
-                <span className="text-gray-500">Goal: {goal} g</span>
+                <span>{actual.toFixed(1)} kg CO₂</span>
+                <span className="text-gray-500">Goal: {goal} kg</span>
             </div>
         </div>
     );
@@ -279,6 +279,43 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
     }
 };
 
+
+const getYesterdayFootprintFromDB = async () => {
+    const user = await getUserByClerkID();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+    
+    const endOfYesterday = new Date(yesterday);
+    endOfYesterday.setHours(23, 59, 59, 999);
+
+    // Query all log types for yesterday
+    const [transportLogs, energyLogs, foodLogs, shoppingLogs] = await Promise.all([
+        prisma.transportationActivityLog.findMany({
+            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
+        }),
+        prisma.energyActivityLog.findMany({
+            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
+        }),
+        prisma.foodActivityLog.findMany({
+            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
+        }),
+        prisma.shoppingActivityLog.findMany({
+            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
+        })
+    ]);
+
+    // Sum up all carbon footprints
+    const totalCarbon = [
+        ...transportLogs,
+        ...energyLogs, 
+        ...foodLogs,
+        ...shoppingLogs
+    ].reduce((sum, log) => sum + (log.carbonFootprint || 0), 0);
+
+    return totalCarbon;
+};
+
 // Updated function to get breakdown from AI
 const getRecentCarbonFootprints = async () => {
     try {
@@ -397,11 +434,11 @@ const ActivityPage = async () => {
                     {/* Main Dashboard Cards */}
                     <section className="flex justify-between gap-6">
                         <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
-                            <h2 className="text-xl font-medium mb-4 text-slate-700">Today`s Impact</h2>
+                            <h2 className="text-xl font-medium mb-4 text-slate-700">Today&apos;s Activity</h2>
                             
                             {/* Goal progress bar */}
                             <div className="mb-4">
-                                <SimpleProgressBar actual={todaysTotal} goal={8000} />
+                                <SimpleProgressBar actual={todaysTotal} goal={80} />
                             </div>
                             
                             <div className="mb-6">
@@ -410,25 +447,25 @@ const ActivityPage = async () => {
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Transportation:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.transportation > 0 ? `${carbonData.transportation.toFixed(2)} g CO₂` : '--'}
+                                            {carbonData.transportation > 0 ? `${carbonData.transportation.toFixed(2)} kg CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Food:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.food > 0 ? `${carbonData.food.toFixed(2)} g CO₂` : '--'}
+                                            {carbonData.food > 0 ? `${carbonData.food.toFixed(2)} kg CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Energy:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.energy > 0 ? `${carbonData.energy.toFixed(2)} g CO₂` : '--'}
+                                            {carbonData.energy > 0 ? `${carbonData.energy.toFixed(2)} kg CO₂` : '--'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-1.5 px-2 rounded hover:bg-slate-50/80 transition-colors">
                                         <span className="text-slate-600">Shopping:</span>
                                         <span className="text-slate-500 font-mono text-sm">
-                                            {carbonData.shopping > 0 ? `${carbonData.shopping.toFixed(2)} g CO₂` : '--'}
+                                            {carbonData.shopping > 0 ? `${carbonData.shopping.toFixed(2)} kg CO₂` : '--'}
                                         </span>
                                     </div>
                                 </div>
@@ -457,9 +494,10 @@ const ActivityPage = async () => {
                         </div>
                         
                         <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex-1">
-                            <h2 className="text-xl font-medium mb-4 text-slate-700">Weekly Carbon Footprint</h2>
-                            <div className="h-64">
-                                <CarbonFootprintChart aiAnalysis={aiAnalysis} />
+                            {/* <h2 className="text-xl font-medium mb-4 text-slate-700">Weekly Carbon Footprint</h2> */}
+                            <div className="h-full">
+                                {/* <CarbonFootprintChart aiAnalysis={aiAnalysis} /> */}
+                                <ImpactLevelVisualization yesterdayData={await getYesterdayFootprintFromDB()} />
                             </div>
                         </div>
                     </section>
