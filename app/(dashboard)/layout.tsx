@@ -41,7 +41,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Overview</span>
+            <span className="font-medium">Home</span>
           </Link>
           
           <Link 
@@ -51,7 +51,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Activity Log</span>
+            <span className="font-medium text-base">Log Activity</span>
           </Link>
           
           <Link 
@@ -61,7 +61,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             }`}
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full group-hover:bg-emerald-600 transition-colors"></div>
-            <span className="font-medium">Analytics</span>
+            <span className="font-medium">Impact Dashboard</span>
           </Link>
 
           <div className="relative group">

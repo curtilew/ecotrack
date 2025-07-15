@@ -18,7 +18,8 @@ import {
   Circle,
   Activity,
   Calendar,
-  Award
+  Award,
+  Hammer
 } from 'lucide-react';
 
 const AnalyticsPage = () => {
@@ -350,15 +351,19 @@ const AnalyticsPage = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+
+          <div className="bg-gray-300 rounded-xl shadow-sm border border-gray-200 p-6 relative group">
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+              <Hammer size={14} /> Coming Soon
+            </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Community Rank</p>
-                <p className="text-2xl font-bold text-gray-900">{keyMetrics.rank}</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">Community Rank</p>
+                <p className="text-2xl font-bold text-gray-500">{keyMetrics.rank}</p>
                 <p className="text-sm text-gray-500">Among users</p>
                 <div className="flex items-center gap-1 mt-2">
                   {getIcon('award', 'w-4 h-4 text-purple-600')}
-                  <span className="text-sm text-purple-600 font-medium">Excellent</span>
+                  <span className="text-sm text-purple-500 font-medium">Excellent</span>
                 </div>
               </div>
               <div className="bg-purple-50 p-3 rounded-lg">
@@ -597,12 +602,15 @@ const AnalyticsPage = () => {
         </div>
 
         {/* Insights and Achievements */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative group">
           {/* AI Insights */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-gray-300 rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="absolute top-full right-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+              <Hammer size={14} /> Coming Soon
+            </div>
             <div className="flex items-center gap-2 mb-4">
-              {getIcon('lightbulb', 'w-5 h-5 text-gray-700')}
-              <h3 className="text-lg font-semibold text-gray-900">AI Insights</h3>
+              {getIcon('lightbulb', 'w-5 h-5 text-gray-500')}
+              <h3 className="text-lg font-semibold text-gray-500">AI Insights</h3>
             </div>
             <div className="space-y-4">
               {insights.map((insight, index) => (
@@ -634,10 +642,11 @@ const AnalyticsPage = () => {
           </div>
 
           {/* Achievements */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-gray-300 rounded-xl shadow-sm border border-gray-200 p-6">
+            
             <div className="flex items-center gap-2 mb-4">
               {getIcon('award', 'w-5 h-5 text-gray-700')}
-              <h3 className="text-lg font-semibold text-gray-900">Achievements</h3>
+              <h3 className="text-lg font-semibold text-gray-500">Achievements</h3>
             </div>
             <div className="space-y-4">
               {achievements.map((achievement, index) => (

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-const DailyImpactVisualization = ({ yesterdayData = 45.2 }) => {
+const DailyImpactVisualization = ({ yesterdayData }: { yesterdayData: number }) => {
   const [animationPhase, setAnimationPhase] = useState(0);
   
   // Average daily carbon footprint for comparison (in kg CO2)

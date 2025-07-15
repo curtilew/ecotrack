@@ -9,10 +9,10 @@ const parser = StructuredOutputParser.fromZodSchema(
             .number()
             .describe('The estimated total CO2 carbon footprint in kilograms (kg) as a decimal number with up to 2 decimal places'),
         breakdown: z.object({
-            transportation: z.number().optional().describe('CO2 from transportation activities in g'),
-            energy: z.number().optional().describe('CO2 from energy consumption in g'),
-            food: z.number().optional().describe('CO2 from food consumption in g'),
-            shopping: z.number().optional().describe('CO2 from purchases/shopping in g')
+            transportation: z.number().optional().describe('CO2 from transportation activities in kg'),
+            energy: z.number().optional().describe('CO2 from energy consumption in kg'),
+            food: z.number().optional().describe('CO2 from food consumption in kg'),
+            shopping: z.number().optional().describe('CO2 from purchases/shopping in kg')
         }).describe('Breakdown of carbon footprint by category'),
         confidence: z
             .enum(['high', 'medium', 'low'])

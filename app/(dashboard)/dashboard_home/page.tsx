@@ -11,17 +11,6 @@ import { analyzeTotal } from "@/utils/ai"
 import ImpactLevelVisualization from "@/components/ImpactLevel"
 
 
-// const getLogRoute = (log) => {
-//         // Route to the appropriate log detail page based on log type
-//         const routeMap = {
-//             'transportation': `/activitylog/transportation/${log.id}`,
-//             'energy': `/activitylog/energy/${log.id}`,
-//             'food': `/activitylog/food/${log.id}`,
-//             'shopping': `/activitylog/shopping/${log.id}`,
-//         }
-//         return routeMap[log.logType] || `/activitylog/${log.id}`
-//     }
-
 const getLogs = async () => {
     const user = await getUserByClerkID()
     
@@ -65,7 +54,7 @@ type SimpleProgressBarProps = {
 };
 
 const SimpleProgressBar = ({ actual, goal = 50 }: SimpleProgressBarProps) => {
-    const percentage = Math.min((actual / goal) * 100 * 1000, 100);
+    const percentage = Math.min((actual / goal) * 100, 100);
     const isOver = actual > goal;
     
     return (
@@ -78,7 +67,7 @@ const SimpleProgressBar = ({ actual, goal = 50 }: SimpleProgressBarProps) => {
                 />
             </div>
             <div className="flex justify-between text-sm">
-                <span>{actual.toFixed(1)} kg CO₂</span>
+                <span>{(actual).toFixed(1)} kg CO₂</span>
                 <span className="text-gray-500">Goal: {goal} kg</span>
             </div>
         </div>
@@ -201,7 +190,7 @@ const getAIAnalysis = async (dateRange = 'today') => {
 
 
 // Updated function to get today's total from AI
-const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
+const getTodaysTotalWithClientTimezone = async (userTimezone = 'est') => {
     const user = await getUserByClerkID();
     
     // Fallback to server timezone if client timezone not provided
@@ -227,8 +216,8 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
                 where: { 
                     userId: user.id, 
                     date: { 
-                        gte: today, 
-                        lt: tomorrow 
+                        gte: today
+                        
                     } 
                 }
             }),
@@ -236,8 +225,8 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
                 where: { 
                     userId: user.id, 
                     date: { 
-                        gte: today, 
-                        lt: tomorrow 
+                        gte: today
+                     
                     } 
                 }
             }),
@@ -245,8 +234,8 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
                 where: { 
                     userId: user.id, 
                     date: { 
-                        gte: today, 
-                        lt: tomorrow 
+                        gte: today
+                       
                     } 
                 }
             }),
@@ -254,8 +243,8 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
                 where: { 
                     userId: user.id, 
                     date: { 
-                        gte: today, 
-                        lt: tomorrow 
+                        gte: today 
+                       
                     } 
                 }
             })
@@ -268,7 +257,7 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
             food: food,
             shopping: shopping
         };
-
+        // console.log('Today\'s activities:', todaysActivities);
         // Get AI analysis for today's activities
         const aiAnalysis = await analyzeTotal(JSON.stringify(todaysActivities));
         
@@ -280,40 +269,46 @@ const getTodaysTotalWithClientTimezone = async (userTimezone = null) => {
 };
 
 
-const getYesterdayFootprintFromDB = async () => {
-    const user = await getUserByClerkID();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    yesterday.setHours(0, 0, 0, 0);
-    
-    const endOfYesterday = new Date(yesterday);
-    endOfYesterday.setHours(23, 59, 59, 999);
+const getYesterdayActivities = async () => {
+    try {
+        const user = await getUserByClerkID();
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        const startOfYesterday = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 0, 0, 0, 0);
+        const endOfYesterday = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 23, 59, 59, 999);
 
-    // Query all log types for yesterday
-    const [transportLogs, energyLogs, foodLogs, shoppingLogs] = await Promise.all([
-        prisma.transportationActivityLog.findMany({
-            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
-        }),
-        prisma.energyActivityLog.findMany({
-            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
-        }),
-        prisma.foodActivityLog.findMany({
-            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
-        }),
-        prisma.shoppingActivityLog.findMany({
-            where: { userId: user.id, date: { gte: yesterday, lte: endOfYesterday } }
-        })
-    ]);
+        // Query all log types for yesterday only
+        const [transport, energy, food, shopping] = await Promise.all([
+            prisma.transportationActivityLog.findMany({
+                where: { userId: user.id, date: { gte: startOfYesterday, lte: endOfYesterday } }
+            }),
+            prisma.energyActivityLog.findMany({
+                where: { userId: user.id, date: { gte: startOfYesterday, lte: endOfYesterday } }
+            }),
+            prisma.foodActivityLog.findMany({
+                where: { userId: user.id, date: { gte: startOfYesterday, lte: endOfYesterday } }
+            }),
+            prisma.shoppingActivityLog.findMany({
+                where: { userId: user.id, date: { gte: startOfYesterday, lte: endOfYesterday } }
+            })
+        ]);
 
-    // Sum up all carbon footprints
-    const totalCarbon = [
-        ...transportLogs,
-        ...energyLogs, 
-        ...foodLogs,
-        ...shoppingLogs
-    ].reduce((sum, log) => sum + (log.carbonFootprint || 0), 0);
-
-    return totalCarbon;
+        const yesterdayActivities = {
+            transportation: transport,
+            energy: energy,
+            food: food,
+            shopping: shopping
+        };
+        // console.log('Yesterday\'s activities:', yesterdayActivities);
+        // Get AI analysis for yesterday's activities
+        const aiAnalysis = await analyzeTotal(JSON.stringify(yesterdayActivities));
+        console.log('AI Analysis for yesterday:', aiAnalysis);
+        return aiAnalysis.total || 0;
+    } catch (error) {
+        console.error('Error getting yesterday\'s AI total:', error);
+        return 0;
+    }
 };
 
 // Updated function to get breakdown from AI
@@ -344,66 +339,6 @@ const getRecentCarbonFootprints = async () => {
         };
     }
 };
-
-// const getDailyCarbonByCategory = async (days = 7) => {
-//     const user = await getUserByClerkID();
-//     const endDate = new Date();
-//     const startDate = new Date();
-//     startDate.setDate(startDate.getDate() - days);
-
-//     const [transport, energy, food, shopping] = await Promise.all([
-//         prisma.transportationActivityLog.findMany({
-//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-//             select: { date: true, carbonFootprint: true }
-//         }),
-//         prisma.energyActivityLog.findMany({
-//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-//             select: { date: true, carbonFootprint: true }
-//         }),
-//         prisma.foodActivityLog.findMany({
-//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-//             select: { date: true, carbonFootprint: true }
-//         }),
-//         prisma.shoppingActivityLog.findMany({
-//             where: { userId: user.id, date: { gte: startDate, lte: endDate, not: null } },
-//             select: { date: true, carbonFootprint: true }
-//         })
-//     ]);
-
-//     // Group by date
-//     const dailyData = {};
-    
-//     transport.forEach(log => {
-//         const date = log.date.toISOString().split('T')[0];
-//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-//         dailyData[date].transport += log.carbonFootprint || 0;
-//     });
-    
-//     energy.forEach(log => {
-//         const date = log.date.toISOString().split('T')[0];
-//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-//         dailyData[date].energy += log.carbonFootprint || 0;
-//     });
-    
-//     food.forEach(log => {
-//         const date = log.date.toISOString().split('T')[0];
-//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-//         dailyData[date].food += log.carbonFootprint || 0;
-//     });
-    
-//     shopping.forEach(log => {
-//         const date = log.date.toISOString().split('T')[0];
-//         if (!dailyData[date]) dailyData[date] = { transport: 0, energy: 0, food: 0, shopping: 0 };
-//         dailyData[date].shopping += log.carbonFootprint || 0;
-//     });
-
-//     return Object.entries(dailyData)
-//         .sort(([a], [b]) => a.localeCompare(b))
-//         .map(([date, data]) => ({
-//             date,
-//             ...data
-//         }));
-// };
 
 
 // Updated ActivityPage component
@@ -438,7 +373,7 @@ const ActivityPage = async () => {
                             
                             {/* Goal progress bar */}
                             <div className="mb-4">
-                                <SimpleProgressBar actual={todaysTotal} goal={80} />
+                                <SimpleProgressBar actual={todaysTotal}  goal={80} />
                             </div>
                             
                             <div className="mb-6">
@@ -497,7 +432,8 @@ const ActivityPage = async () => {
                             {/* <h2 className="text-xl font-medium mb-4 text-slate-700">Weekly Carbon Footprint</h2> */}
                             <div className="h-full">
                                 {/* <CarbonFootprintChart aiAnalysis={aiAnalysis} /> */}
-                                <ImpactLevelVisualization yesterdayData={await getYesterdayFootprintFromDB()} />
+                                <ImpactLevelVisualization yesterdayData={await getYesterdayActivities()} />
+
                             </div>
                         </div>
                     </section>

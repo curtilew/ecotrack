@@ -38,7 +38,7 @@ const ActivityFormPage = () => {
                 setTimeout(() => {
                     localStorage.removeItem('selectedActivityType')
                     router.push('/activitylog')
-                }, 4000) // 2 seconds of confetti
+                }, 2200) // 2 seconds of confetti
             }
         }
 

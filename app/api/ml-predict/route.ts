@@ -4,38 +4,37 @@ import { prisma } from '@/utils/db';
 import * as tf from '@tensorflow/tfjs';   //node version for server-side ML
 
 class MLPredictor {
+  model: tf.LayersModel | null;
+  scaler: { mean: number[] | null; std: number[] | null };
+
   constructor() {
-    //@ts-expect-error: model property is dynamically assigned and not declared in the class
     this.model = null;
-    //@ts-expect-error: scaler property is dynamically assigned and not declared in the class
     this.scaler = { mean: null, std: null };
   }
 
-  // Simplified feature extraction for your data
+  // Feature extraction for data
   //@ts-expect-error: activities parameter is not typed
-  prepareData(activities) {
-    const dailyData = {};
-    //@ts-expect-error: activities parameter is not typed
+  prepareData(activities: ActivityLog[]): number[] {
+    const dailyData: { [key: string]: { totalCarbon: number; count: number } } = {};
     activities.forEach(activity => {
       const date = new Date(activity.date).toDateString();
-      //@ts-expect-error: dailyData is not typed
+
       if (!dailyData[date]) {
-        //@ts-expect-error: dailyData is not typed
+     
         dailyData[date] = { totalCarbon: 0, count: 0 };
       }
       
       const carbon = activity.carbonFootprint || this.estimateCarbon(activity);
-      //@ts-expect-error: dailyData is not typed
+      
       dailyData[date].totalCarbon += carbon;
-      //@ts-expect-error: dailyData is not typed
       dailyData[date].count += 1;
     });
-
+    console.log('Daily data prepared:', dailyData);
     // Convert to array and sort by date
     return Object.entries(dailyData)
     //@ts-expect-error: dailyData is not typed
       .sort(([a], [b]) => new Date(a) - new Date(b))
-      //@ts-expect-error: dailyData is not typed
+   
       .map(([, data]) => data.totalCarbon);
   }
 
@@ -54,18 +53,29 @@ class MLPredictor {
   // Simple neural network for demonstration
   //@ts-expect-error: data parameter is not typed
   async createAndTrainModel(data) {
+    
     if (data.length < 14) {
+      
       throw new Error('Need at least 14 days of data for ML training');
     }
+
+
+    // Dispose previous model if exists
+    if (this.model) {
+      console.log('Disposing previous model...');
+      this.model.dispose();  // ← This frees up memory and variable names!
+      this.model = null;
+    }
+
 
     // Normalize data
     const tensor = tf.tensor1d(data);
     const mean = tf.mean(tensor);
     const std = tf.sqrt(tf.mean(tf.square(tf.sub(tensor, mean))));
-    //@ts-expect-error: scaler is not typed
+ 
     this.scaler = { 
-      mean: await mean.data(), 
-      std: await std.data() 
+      mean: Array.from(await mean.data()), 
+      std: Array.from(await std.data()) 
     };
     
     const normalized = tf.div(tf.sub(tensor, mean), tf.add(std, 1e-8));
@@ -83,7 +93,7 @@ class MLPredictor {
     }
 
     // Build simple neural network
-    // @ts-expect-error: model is not typed
+ 
     this.model = tf.sequential({
       layers: [
         tf.layers.dense({ 
@@ -104,7 +114,7 @@ class MLPredictor {
     });
 
     // Compile model
-    //@ts-expect-error: model is not typed
+  
     this.model.compile({
       optimizer: tf.train.adam(0.01),
       loss: 'meanSquaredError',
@@ -114,7 +124,7 @@ class MLPredictor {
     // Train model
     const xs = tf.tensor2d(sequences);
     const ys = tf.tensor1d(targets);
-    //@ts-expect-error: model is not typed
+
     await this.model.fit(xs, ys, {
       epochs: 50,
       batchSize: Math.min(8, sequences.length),
@@ -127,7 +137,7 @@ class MLPredictor {
   // Predict next 7 days
   //@ts-expect-error: data parameter is not typed
   async predict7Days(data) {
-    //@ts-expect-error: model is not typed
+  
     if (!this.model) {
       await this.createAndTrainModel(data);
     }
@@ -146,6 +156,7 @@ class MLPredictor {
       const input = tf.tensor2d([currentSequence]);
       //@ts-expect-error: model is not typed
       const prediction = await this.model.predict(input);
+      //@ts-expect-error: prediction is not typed
       const predValue = await prediction.data();
       
       // Denormalize
@@ -158,6 +169,7 @@ class MLPredictor {
       
       // Clean up tensors
       input.dispose();
+      //@ts-expect-error: prediction is not typed
       prediction.dispose();
     }
 
@@ -169,6 +181,9 @@ class MLPredictor {
   }
 }
 
+
+
+/////////////////////////////////////////////// API route to handle ML predictions
 export async function GET() {
   try {
     const user = await getUserByClerkID();
@@ -207,6 +222,7 @@ export async function GET() {
     const dailyData = predictor.prepareData(allActivities);
     
     if (dailyData.length < 14) {
+
       return NextResponse.json({
         predictions: Array(7).fill(dailyData[dailyData.length - 1] || 0),
         accuracy: 0,
