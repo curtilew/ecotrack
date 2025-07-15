@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div>
             <span className="text-xl font-bold text-gray-900">EcoTrack</span>
             <br />
-            <span className="text-sm text-gray-900">Beta v0.8</span>
+            <span className="text-sm text-gray-900">Alpha v0.8</span>
             </div>
           </div>
         </div>
