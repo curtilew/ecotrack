@@ -1,6 +1,6 @@
 'use client'
 
-import { updateEntry } from "@/utils/api";
+import { updateEntry, deleteEntry } from "@/utils/api";
 import { useState } from "react";
 // @ts-expect-error dynamic log type lookup
 const Editor = ({ log }) => {
@@ -37,6 +37,26 @@ const Editor = ({ log }) => {
     await updateEntry(log.id, formData, log.logType);
     setIsLoading(false);
   };
+
+  const handleDelete = async () => {
+    try {
+        const confirmDelete = window.confirm('Are you sure you want to delete this entry?');
+        
+        if (!confirmDelete) return;
+
+        await deleteEntry(log.id, formData, log.logType);
+        alert('Entry deleted successfully!');
+        // Refresh the page or update state
+        // router.refresh();
+        // // Or redirect
+        // router.push('/activitylog');
+        
+    } catch (error) {
+        console.error('Failed to delete:', error);
+        alert('Failed to delete entry. Please try again.');
+    }
+};
+
 
   return (
     <form role="form" className="space-y-4 p-6" onSubmit={e => { e.preventDefault(); handleSave(); }}>
@@ -241,6 +261,14 @@ const Editor = ({ log }) => {
         disabled={isLoading}
       >
         {isLoading ? "Saving..." : "Save"}
+      </button>
+      <button
+        type="button"
+        className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+        disabled={isLoading}
+        onClick={handleDelete}
+      >
+        {isLoading ? "Deleting..." : "Delete"}
       </button>
     </form>
   );

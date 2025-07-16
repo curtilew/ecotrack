@@ -79,3 +79,43 @@ export const createNewEntry = async (entryData, logType) => {
     }
 }
 
+
+// Add this to your /utils/api.js file
+// @ts-expect-error Database returns null but component expects undefined
+export const deleteEntry = async (id, logData, logType) => {
+    console.log('Updating entry ID:', id);
+    console.log('Sending data:', logData);
+    console.log('Log type:', logType);
+    
+    // Map log types to their respective API endpoints
+    const routeMap = {
+        'transportation': `/api/activitylog/${id}`,
+        'energy': `/api/energylog/${id}`,
+        'food': `/api/foodlog/${id}`,
+        'shopping': `/api/shoppinglog/${id}`
+    };
+// @ts-expect-error Database returns null but component expects undefined
+    const endpoint = routeMap[logType];
+    
+    if (!endpoint) {
+        throw new Error(`Invalid log type: ${logType}`);
+    }
+
+    const res = await fetch(new Request(createURL(endpoint), {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    
+    }));
+
+    if (res.ok) {
+        const data = await res.json();
+
+
+        return data.data;
+    } else {
+        throw new Error(`Failed to update ${logType} entry`);
+    }
+}
+

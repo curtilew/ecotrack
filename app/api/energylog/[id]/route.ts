@@ -1,6 +1,9 @@
 import { getUserByClerkID } from "@/utils/auth"
 import { prisma } from "@/utils/db"
+import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
+
+
 // @ts-expect-error dynamic log type lookup
 export const PATCH = async (request: Request, { params }) => {
     try {
@@ -50,6 +53,54 @@ export const PATCH = async (request: Request, { params }) => {
         return NextResponse.json(
             // @ts-expect-error error may not have a message property
             { error: 'Failed to update energy log', details: error.message },
+            { status: 500 }
+        );
+    }
+}
+
+
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+    try {
+        const user = await getUserByClerkID();
+        const { id } = params;
+        
+        console.log('Deleting energy log:', id);
+        
+        const existingLog = await prisma.energyActivityLog.findUnique({
+            where: {
+                userId_id: {
+                    userId: user.id,
+                    id: id,
+                },
+            },
+        });
+        
+        if (!existingLog) {
+            return NextResponse.json(
+                { error: 'Log not found or unauthorized' },
+                { status: 404 }
+            );
+        }
+        
+        const deletedLog = await prisma.energyActivityLog.delete({
+            where: {
+                userId_id: {
+                    userId: user.id,
+                    id: id,
+                },
+            },
+        });
+        
+        revalidatePath('/activitylog');
+        return NextResponse.json({ 
+            data: deletedLog,
+            message: 'Energy log deleted successfully' 
+        });
+        
+    } catch (error) {
+        console.error('Delete error:', error);
+        return NextResponse.json(
+            { error: 'Failed to delete energy log' },
             { status: 500 }
         );
     }
