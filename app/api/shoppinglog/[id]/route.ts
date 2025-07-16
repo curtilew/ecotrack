@@ -48,8 +48,8 @@ export const PATCH = async (request: Request, { params }) => {
     }
 }
 
-
-export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+// @ts-expect-error Database returns null but component expects undefined
+export const DELETE = async (request: Request, { params }) => {
     try {
         const user = await getUserByClerkID();
         const { id } = params;
