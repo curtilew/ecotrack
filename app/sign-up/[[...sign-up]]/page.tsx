@@ -55,7 +55,7 @@ const SignUpPage = () => {
                         fontWeight: '200',
                         letterSpacing: '0.02em'
                     }}>
-                        Join EcoTrack
+                        Join My Earth Ledger
                     </h1>
                     
                     <p className="text-gray-600 text-xl mb-3 font-light leading-relaxed" style={{

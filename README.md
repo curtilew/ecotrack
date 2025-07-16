@@ -1,4 +1,4 @@
-# EcoTrack - Personal Carbon Footprint Tracker
+# My Earth Ledger - Personal Carbon Footprint Tracker
 
 A Next.js web application that helps users track their daily carbon footprint across multiple categories (transportation, energy, food, shopping) and provides AI-powered personalized recommendations for reducing environmental impact.
 

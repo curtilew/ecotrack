@@ -14,7 +14,7 @@ export default async function Home() {
           <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">🌱</span>
           </div>
-          <span className="text-xl font-bold text-gray-800">EcoTrack</span>
+          <span className="text-xl font-bold text-gray-800">My Earth Ledger</span>
         </div>
         <Link href="/sign-in">
           <button className="text-gray-600 hover:text-emerald-600 transition-colors">

@@ -29,7 +29,7 @@ const getPromptForCarbonTotal = async (content) => {
     const prompt = new PromptTemplate({
         template: 
             "You are an expert carbon footprint analyst specializing in calculating accurate CO2 emissions from activity data.\n\n" +
-            "CONTEXT: You're analyzing activity log entries from EcoTrack, a personal carbon footprint tracking application. Users log activities across four categories: Transportation, Energy, Food, and Shopping.\n\n" +
+            "CONTEXT: You're analyzing activity log entries from My Earth Ledger, a personal carbon footprint tracking application. Users log activities across four categories: Transportation, Energy, Food, and Shopping.\n\n" +
             "TASK: Calculate the total carbon footprint in kilograms of CO2 equivalent (kg CO2e) for the given activity data.\n\n" +
             "CALCULATION GUIDELINES:\n" +
             "- Use scientifically-backed emission factors from reputable sources (EPA, DEFRA, etc.)\n" +

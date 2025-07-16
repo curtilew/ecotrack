@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <span className="text-white font-bold text-sm">🌱</span>
             </div>
             <div>
-            <span className="text-xl font-bold text-gray-900">EcoTrack</span>
+            <span className="text-sm font-bold text-gray-900">My Earth Ledger</span>
             <br />
             <span className="text-sm text-gray-900">Alpha v0.8</span>
             </div>

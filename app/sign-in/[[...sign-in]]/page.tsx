@@ -74,7 +74,7 @@ const SignInPage = () => {
                         </div> */}
                     </div>
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-3">
-                        EcoTrack
+                        My Earth Ledger
                     </h1>
                     <p className="text-gray-600 text-lg mb-2">
                         Every small step creates lasting change
