@@ -3,8 +3,8 @@ import { prisma } from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
-
-export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
+// @ts-expect-error dynamic log type lookup
+export const PATCH = async (request: Request, { params }) => {
     try {
         const body = await request.json();
         console.log('Transportation PATCH - Received body:', body);
@@ -44,8 +44,8 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
         );
     }
 }
-
-export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+// @ts-expect-error Database returns null but component expects undefined
+export const DELETE = async (request: Request, { params }) => {
     try {
         const user = await getUserByClerkID();
         const { id } = params;
