@@ -33,8 +33,9 @@ const handleSave = async () => {
   return (
     <form className="space-y-6 p-8" onSubmit={e => { e.preventDefault(); handleSave(); }}>
       <div>
-        <label className="block mb-2 font-semibold">Activity Type</label>
+        <label htmlFor='activityType' className="block mb-2 font-semibold">Activity Type</label>
         <select
+          id='activityType'
           className="w-full border rounded px-3 py-2"
           value={activityType}
           onChange={e => setActivityType(e.target.value)}
@@ -46,8 +47,9 @@ const handleSave = async () => {
         </select>
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Distance (miles)</label>
+        <label htmlFor='distance' className="block mb-2 font-semibold">Distance (miles)</label>
         <input
+          id='distance'
           type="number"
           className="w-full border rounded px-3 py-2"
           value={distance}
@@ -57,8 +59,9 @@ const handleSave = async () => {
         />
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Date</label>
+        <label htmlFor='date' className="block mb-2 font-semibold">Date</label>
         <input
+          id='date'
           type="date"
           className="w-full border rounded px-3 py-2"
           value={date}
@@ -66,8 +69,9 @@ const handleSave = async () => {
         />
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Note</label>
+        <label htmlFor='note' className="block mb-2 font-semibold">Note</label>
         <input
+          id='note'
           type="text"
           className="w-full border rounded px-3 py-2"
           value={note}

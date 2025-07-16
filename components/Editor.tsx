@@ -6,20 +6,20 @@ import { useState } from "react";
 const Editor = ({ log }) => {
   const [formData, setFormData] = useState({
     // Transportation
-    activityType: log?.activityType || "",
-    distance: log?.distance || "",
-    // Energy  
-    energyType: log?.energyType || "",
-    usage: log?.usage || "",
-    unit: log?.unit || "",
+    activityType: log?.activityType?.toString() || "",
+    distance: log?.distance?.toString() || "",
+    // Energy
+    energyType: log?.energyType?.toString() || "",
+    usage: log?.usage?.toString() || "",
+    unit: log?.unit?.toString() || "",
     // Food
-    foodType: log?.foodType || "",
-    quantity: log?.quantity || "",
-    mealType: log?.mealType || "",
+    foodType: log?.foodType?.toString() || "",
+    quantity: log?.quantity?.toString() || "",
+    mealType: log?.mealType?.toString() || "",
     // Shopping
-    category: log?.category || "",
-    itemName: log?.itemName || "",
-    price: log?.price || "",
+    category: log?.category?.toString() || "",
+    itemName: log?.itemName?.toString() || "",
+    price: log?.price?.toString() || "",
     isSecondHand: log?.isSecondHand || false,
     // Common
     date: log?.date ? new Date(log.date).toISOString().slice(0, 10) : "",
@@ -39,14 +39,15 @@ const Editor = ({ log }) => {
   };
 
   return (
-    <form className="space-y-4 p-6" onSubmit={e => { e.preventDefault(); handleSave(); }}>
+    <form role="form" className="space-y-4 p-6" onSubmit={e => { e.preventDefault(); handleSave(); }}>
       
       {/* Transportation Fields */}
       {log.logType === 'transportation' && (
         <>
           <div>
-            <label className="block mb-1 font-medium">Activity Type</label>
+            <label htmlFor='activityType' className="block mb-1 font-medium">Activity Type</label>
             <select 
+              id='activityType'
               className="w-full border rounded px-3 py-2"
               value={formData.activityType}
               onChange={e => handleChange('activityType', e.target.value)}
@@ -59,9 +60,10 @@ const Editor = ({ log }) => {
             </select>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Distance (miles)</label>
+            <label htmlFor='distance' className="block mb-1 font-medium">Distance (miles)</label>
             <input 
               type="number" 
+              id='distance'
               className="w-full border rounded px-3 py-2"
               value={formData.distance}
               onChange={e => handleChange('distance', e.target.value)}
@@ -74,8 +76,9 @@ const Editor = ({ log }) => {
       {log.logType === 'energy' && (
         <>
           <div>
-            <label className="block mb-1 font-medium">Energy Type</label>
+            <label htmlFor='energyType' className="block mb-1 font-medium">Energy Type</label>
             <select 
+              id='energyType'
               className="w-full border rounded px-3 py-2"
               value={formData.energyType}
               onChange={e => handleChange('energyType', e.target.value)}
@@ -87,17 +90,19 @@ const Editor = ({ log }) => {
             </select>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Usage</label>
+            <label htmlFor='usage' className="block mb-1 font-medium">Usage</label>
             <input 
               type="number" 
+              id='usage'
               className="w-full border rounded px-3 py-2"
               value={formData.usage}
               onChange={e => handleChange('usage', e.target.value)}
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Unit</label>
+            <label htmlFor='unit' className="block mb-1 font-medium">Unit</label>
             <select 
+              id='unit'
               className="w-full border rounded px-3 py-2"
               value={formData.unit}
               onChange={e => handleChange('unit', e.target.value)}
@@ -115,8 +120,9 @@ const Editor = ({ log }) => {
       {log.logType === 'food' && (
         <>
           <div>
-            <label className="block mb-1 font-medium">Food Type</label>
+            <label htmlFor='foodType' className="block mb-1 font-medium">Food Type</label>
             <select 
+              id='foodType'
               className="w-full border rounded px-3 py-2"
               value={formData.foodType}
               onChange={e => handleChange('foodType', e.target.value)}
@@ -129,17 +135,19 @@ const Editor = ({ log }) => {
             </select>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Quantity</label>
+            <label htmlFor='quantity' className="block mb-1 font-medium">Quantity</label>
             <input 
               type="number" 
+              id='quantity'
               className="w-full border rounded px-3 py-2"
               value={formData.quantity}
               onChange={e => handleChange('quantity', e.target.value)}
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Meal Type</label>
+            <label htmlFor='mealType' className="block mb-1 font-medium">Meal Type</label>
             <select 
+              id='mealType'
               className="w-full border rounded px-3 py-2"
               value={formData.mealType}
               onChange={e => handleChange('mealType', e.target.value)}
@@ -157,8 +165,9 @@ const Editor = ({ log }) => {
       {log.logType === 'shopping' && (
         <>
           <div>
-            <label className="block mb-1 font-medium">Category</label>
+            <label htmlFor='category' className="block mb-1 font-medium">Category</label>
             <select 
+              id='category'
               className="w-full border rounded px-3 py-2"
               value={formData.category}
               onChange={e => handleChange('category', e.target.value)}
@@ -170,39 +179,45 @@ const Editor = ({ log }) => {
             </select>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Item Name</label>
+            <label htmlFor='itemName' className="block mb-1 font-medium">Item Name</label>
             <input 
               type="text" 
+              id='itemName'
               className="w-full border rounded px-3 py-2"
               value={formData.itemName}
               onChange={e => handleChange('itemName', e.target.value)}
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Price</label>
+            <label htmlFor='price' className="block mb-1 font-medium">Price</label>
             <input 
               type="number" 
+              id='price'
               className="w-full border rounded px-3 py-2"
               value={formData.price}
               onChange={e => handleChange('price', e.target.value)}
             />
           </div>
           <div>
+            <label htmlFor="isSecondHand" className="ml-2">
             <input 
+              id='isSecondHand'
               type="checkbox" 
               checked={formData.isSecondHand}
               onChange={e => handleChange('isSecondHand', e.target.checked)}
             />
-            <label className="ml-2">Second-hand</label>
+            Second-hand
+            </label>
           </div>
         </>
       )}
 
       {/* Common Fields */}
       <div>
-        <label className="block mb-1 font-medium">Date</label>
+        <label htmlFor='date' className="block mb-1 font-medium">Date</label>
         <input 
           type="date" 
+          id='date'
           className="w-full border rounded px-3 py-2"
           value={formData.date}
           onChange={e => handleChange('date', e.target.value)}
@@ -210,9 +225,10 @@ const Editor = ({ log }) => {
       </div>
       
       <div>
-        <label className="block mb-1 font-medium">Note</label>
+        <label htmlFor='note' className="block mb-1 font-medium">Note</label>
         <input 
           type="text" 
+          id='note'
           className="w-full border rounded px-3 py-2"
           value={formData.note}
           onChange={e => handleChange('note', e.target.value)}

@@ -100,7 +100,7 @@ const DailyImpactVisualization = ({ yesterdayData }: { yesterdayData: number }) 
     const impact = yesterdayData;
     if (impact <= 20) return "🌱 Like watering a garden";
     if (impact <= 35) return "🚶 Like walking instead of driving";
-    if (impact <= 50) return "🚗 Like driving 50 miles";
+    if (impact <= 55) return "🚗 Like driving 50 miles";
     if (impact <= 70) return "✈️ Like a short flight";
     return "🛫 Like flying across the country";
   };

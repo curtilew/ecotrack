@@ -18,7 +18,7 @@ const foodTypes = [
 
 const CreateFoodLog = () => {
   const [foodType, setFoodType] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState("servings");
   const [mealType, setMealType] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -41,8 +41,9 @@ const CreateFoodLog = () => {
   return (
     <form className="space-y-6 p-8" onSubmit={e => { e.preventDefault(); handleSave(); }}>
       <div>
-        <label className="block mb-2 font-semibold">Food Type</label>
+        <label htmlFor="foodType" className="block mb-2 font-semibold">Food Type</label>
         <select
+          id="foodType"
           className="w-full border rounded px-3 py-2"
           value={foodType}
           onChange={e => setFoodType(e.target.value)}
@@ -54,9 +55,10 @@ const CreateFoodLog = () => {
         </select>
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Quantity</label>
+        <label htmlFor="quantity" className="block mb-2 font-semibold">Quantity</label>
         <input
           type="number"
+          id="quantity"
           className="w-full border rounded px-3 py-2"
           value={quantity}
           onChange={e => setQuantity(e.target.value)}
@@ -66,8 +68,9 @@ const CreateFoodLog = () => {
         />
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Unit</label>
+        <label htmlFor="unit" className="block mb-2 font-semibold">Unit</label>
         <select
+          id="unit"
           className="w-full border rounded px-3 py-2"
           value={unit}
           onChange={e => setUnit(e.target.value)}
@@ -80,8 +83,9 @@ const CreateFoodLog = () => {
         </select>
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Meal Type</label>
+        <label htmlFor="mealType" className="block mb-2 font-semibold">Meal Type</label>
         <select
+          id="mealType"
           className="w-full border rounded px-3 py-2"
           value={mealType}
           onChange={e => setMealType(e.target.value)}
@@ -94,18 +98,20 @@ const CreateFoodLog = () => {
         </select>
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Date</label>
+        <label htmlFor="date" className="block mb-2 font-semibold">Date</label>
         <input
           type="date"
+          id="date"
           className="w-full border rounded px-3 py-2"
           value={date}
           onChange={e => setDate(e.target.value)}
         />
       </div>
       <div>
-        <label className="block mb-2 font-semibold">Note</label>
+        <label htmlFor="note" className="block mb-2 font-semibold">Note</label>
         <input
           type="text"
+          id="note"
           className="w-full border rounded px-3 py-2"
           value={note}
           onChange={e => setNote(e.target.value)}
