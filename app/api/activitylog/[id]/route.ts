@@ -3,8 +3,8 @@ import { prisma } from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
-// @ts-expect-error dynamic log type lookup
-export const PATCH = async (request: Request, { params }) => {
+
+export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
     try {
         const body = await request.json();
         console.log('Transportation PATCH - Received body:', body);
