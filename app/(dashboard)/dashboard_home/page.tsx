@@ -79,7 +79,7 @@ const getAIAnalysis = async (dateRange = 'today') => {
     try {
         const user = await getUserByClerkID();
         
-        // Get today's date in user's local timezone (simple)
+        // Get today's date in user's local timezone 
         const today = new Date().toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
         
         // Calculate date filters based on the date range

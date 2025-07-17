@@ -50,7 +50,7 @@ class MLPredictor {
     return 1.0; // default
   }
 
-  // Simple neural network for demonstration
+
   //@ts-expect-error: data parameter is not typed
   async createAndTrainModel(data) {
     

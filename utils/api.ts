@@ -80,7 +80,7 @@ export const createNewEntry = async (entryData, logType) => {
 }
 
 
-// Add this to your /utils/api.js file
+
 // @ts-expect-error Database returns null but component expects undefined
 export const deleteEntry = async (id, logData, logType) => {
     console.log('Updating entry ID:', id);
