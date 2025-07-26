@@ -32,8 +32,20 @@ const handleSave = async () => {
 
   return (
     <form className="space-y-6 p-8" onSubmit={e => { e.preventDefault(); handleSave(); }}>
+        <div>
+          <label htmlFor='date' className="block mb-2 font-semibold">Date</label>
+          <p>step1/4</p>
+          <input
+            id='date'
+            type="date"
+            className="w-full border rounded px-3 py-2"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+        />
+      </div>
       <div>
         <label htmlFor='activityType' className="block mb-2 font-semibold">Activity Type</label>
+        <p>step2/4</p>
         <select
           id='activityType'
           className="w-full border rounded px-3 py-2"
@@ -48,6 +60,7 @@ const handleSave = async () => {
       </div>
       <div>
         <label htmlFor='distance' className="block mb-2 font-semibold">Distance (miles)</label>
+        <p>step3/4</p>
         <input
           id='distance'
           type="number"
@@ -58,7 +71,7 @@ const handleSave = async () => {
           step="any"
         />
       </div>
-      <div>
+      {/* <div>
         <label htmlFor='date' className="block mb-2 font-semibold">Date</label>
         <input
           id='date'
@@ -67,9 +80,10 @@ const handleSave = async () => {
           value={date}
           onChange={e => setDate(e.target.value)}
         />
-      </div>
+      </div> */}
       <div>
-        <label htmlFor='note' className="block mb-2 font-semibold">Note</label>
+        <label htmlFor='note' className="block mb-2 font-semibold">Notes</label>
+        <p>step4/4</p>
         <input
           id='note'
           type="text"

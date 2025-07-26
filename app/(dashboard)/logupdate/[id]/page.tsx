@@ -127,7 +127,7 @@ const EntryPage = async ({ params }) => {
         <div className="h-full w-full grid grid-cols-3">
             <div className="col-span-2 bg-white">
                 {/* Header for Editor Section */}
-                <div className=" bg-emerald-400 px-8 py-6 rounded-t-xl">
+                <div className=" bg-emerald-600 px-8 py-6 rounded-t-xl">
                     <h1 className="text-xl font-medium text-white">Edit Activity</h1>
                     <p className="text-emerald-100 text-sm mt-1 font-light">
                         Update your {entry.logType} activity details

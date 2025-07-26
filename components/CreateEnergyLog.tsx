@@ -35,6 +35,15 @@ const CreateEnergyLog = () => {
   return (
     <form className="space-y-6 p-8" onSubmit={e => { e.preventDefault(); handleSave(); }}>
       <div>
+        <label className="block mb-2 font-semibold">Date</label>
+        <input
+          type="date"
+          className="w-full border rounded px-3 py-2"
+          value={date}
+          onChange={e => setDate(e.target.value)}
+        />
+      </div>
+      <div>
         <label className="block mb-2 font-semibold">Energy Type</label>
         <select
           className="w-full border rounded px-3 py-2"
@@ -72,7 +81,7 @@ const CreateEnergyLog = () => {
           <option value="cubic_feet">Cubic Feet</option>
         </select>
       </div>
-      <div>
+      {/* <div>
         <label className="block mb-2 font-semibold">Date</label>
         <input
           type="date"
@@ -80,7 +89,7 @@ const CreateEnergyLog = () => {
           value={date}
           onChange={e => setDate(e.target.value)}
         />
-      </div>
+      </div> */}
       <div>
         <label className="block mb-2 font-semibold">Note</label>
         <input

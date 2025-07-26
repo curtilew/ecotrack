@@ -43,6 +43,16 @@ const CreateShoppingLog = () => {
   return (
     <form className="space-y-6 p-8" onSubmit={e => { e.preventDefault(); handleSave(); }}>
       <div>
+        <label htmlFor="date" className="block mb-2 font-semibold">Date</label>
+        <input
+          type="date"
+          id="date"
+          className="w-full border rounded px-3 py-2"
+          value={date}
+          onChange={e => setDate(e.target.value)}
+        />
+      </div>
+      <div>
         <label htmlFor="category" className="block mb-2 font-semibold">Category</label>
         <select
           id="category"
@@ -104,7 +114,7 @@ const CreateShoppingLog = () => {
           <span className="font-semibold">Second-hand/Used item</span>
         </label>
       </div>
-      <div>
+      {/* <div>
         <label htmlFor="date" className="block mb-2 font-semibold">Date</label>
         <input
           type="date"
@@ -113,7 +123,7 @@ const CreateShoppingLog = () => {
           value={date}
           onChange={e => setDate(e.target.value)}
         />
-      </div>
+      </div> */}
       <div>
         <label htmlFor="note" className="block mb-2 font-semibold">Note</label>
         <input

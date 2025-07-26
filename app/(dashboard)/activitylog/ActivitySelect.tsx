@@ -1,6 +1,10 @@
 'use client'
 
+import { createNewEntry } from '@/utils/api';
 import { useRouter } from 'next/navigation'
+import { IoMdInformationCircleOutline } from "react-icons/io";
+
+
 
 const ActivitySelector = () => {
     const router = useRouter()
@@ -58,6 +62,23 @@ const ActivitySelector = () => {
     }
   ];
 
+
+      const logPreset = async (activityType, presetData) => {
+        try {
+            // Log the preset activity directly
+            await createNewEntry(presetData, activityType);
+            
+            // Show success message (optional)
+            alert(`${activityType} activity logged successfully!`);
+            
+            // Could redirect to dashboard or stay on selector
+            // router.push('/dashboard');
+        } catch (error) {
+            console.error('Failed to log preset:', error);
+            alert('Failed to log activity. Please try again.');
+        }
+    }
+
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-emerald-50 to-blue-50">
       {/* Header */}
@@ -67,6 +88,9 @@ const ActivitySelector = () => {
         </h2>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto px-6">
           Choose an activity category to start logging your carbon footprint
+        </p>
+        <p className="text-md text-gray-400 max-w-2xl mx-auto px-6">
+          <em>~ 1 minute for each log</em>
         </p>
       </div>
 
@@ -123,13 +147,30 @@ const ActivitySelector = () => {
           ))}
         </div>
       </div>
-
-      {/* Footer hint */}
-      <div className="flex-shrink-0 text-center pb-8">
-        <p className="text-gray-900 text-lg">
-          Click any category above to start logging your environmental impact
-        </p>
+  
+      <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+        <h3 className='relative group flex'>
+          <p className='flex items-center text-xl font-bold text-black-400'>QUICK LOG <IoMdInformationCircleOutline className="align-super text-xl"/></p>
+        <div className="absolute left-1/6 transform -translate-x-1/2 -mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-2">
+          Log recurring activities
+        </div>
+        </h3>
+        <div className="grid grid-cols-2 gap-2">
+          <button 
+            onClick={() => logPreset('transportation', { activityType: 'Car', distance: 25 })}
+            className="p-2 bg-white rounded shadow text-sm hover:bg-gray-50"
+          >
+            🚗 Daily Commute (25mi)
+          </button>
+          <button 
+            onClick={() => logPreset('energy', { energyType: 'Electricity', usage: 150, unit: 'kWh' })}
+            className="p-2 bg-white rounded shadow text-sm hover:bg-gray-50"
+          >
+            ⚡ Weekly Home Energy (150kwh)
+          </button>
+        </div>
       </div>
+
     </div>
   );
 };
